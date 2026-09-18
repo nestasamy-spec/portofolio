@@ -46,12 +46,15 @@ export function CareerJourney() {
                 style={i === 0 ? { top: "0.4rem" } : undefined}
               />
 
-              <div className="grid gap-x-8 gap-y-3 md:grid-cols-[150px_minmax(0,1fr)] lg:grid-cols-[150px_minmax(0,0.85fr)_minmax(0,1.15fr)]">
-                <p className="text-[0.8125rem] text-muted tabular-nums">
+              {/* A date rail and one content column. Splitting the role and
+                  the description into columns of their own left both too
+                  narrow to read at any width the section actually gets. */}
+              <div className="grid gap-x-8 gap-y-2 md:grid-cols-[150px_minmax(0,1fr)]">
+                <p className="text-[0.8125rem] text-muted tabular-nums md:pt-px">
                   {entry.dates}
                 </p>
 
-                <div>
+                <div className="min-w-0">
                   <h3 className="text-[0.9375rem] font-semibold tracking-[-0.01em] text-ink">
                     {entry.role}
                   </h3>
@@ -76,24 +79,27 @@ export function CareerJourney() {
                       {entry.industry}
                     </p>
                   ) : null}
-                </div>
 
-                <div>
-                  <p className="text-[0.8125rem] leading-relaxed text-body text-pretty">
-                    {entry.description}
-                  </p>
-                  {entry.contributions.length ? (
-                    <ul className="mt-3 space-y-1.5">
-                      {entry.contributions.map((c) => (
-                        <li
-                          key={c}
-                          className="relative pl-4 text-[0.75rem] leading-relaxed text-muted text-pretty before:absolute before:left-0 before:top-[0.55em] before:h-[3px] before:w-[3px] before:rounded-full before:bg-muted"
-                        >
-                          {c}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
+                  {/* One measure for both, so the prose keeps a single right
+                      edge instead of the two ragged ones a per-element cap
+                      gives at these two font sizes. */}
+                  <div className="mt-4 max-w-[34rem]">
+                    <p className="text-[0.8125rem] leading-relaxed text-body text-pretty">
+                      {entry.description}
+                    </p>
+                    {entry.contributions.length ? (
+                      <ul className="mt-3 space-y-1.5">
+                        {entry.contributions.map((c) => (
+                          <li
+                            key={c}
+                            className="relative pl-4 text-[0.75rem] leading-relaxed text-muted text-pretty before:absolute before:left-0 before:top-[0.55em] before:h-[3px] before:w-[3px] before:rounded-full before:bg-muted"
+                          >
+                            {c}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </li>
