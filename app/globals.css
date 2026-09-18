@@ -87,9 +87,11 @@
  * Scroll-reveal.
  *
  * The hidden state is scoped to `.reveal-ready`, which an inline script in the
- * document head adds before first paint. If that script never runs — JS off, a
- * bundle error — the class is absent and every section renders plainly visible
- * rather than being stranded at opacity 0.
+ * document head adds before first paint and removes again after 2s unless
+ * `ScrollReveal` has mounted and claimed it. So the content is only ever
+ * hidden while something is there to reveal it: with JS off the class is never
+ * added, and if React fails to mount the class is dropped again. Either way
+ * every section ends up plainly visible rather than stranded at opacity 0.
  */
 @media (prefers-reduced-motion: no-preference) {
   .reveal-ready [data-reveal] {

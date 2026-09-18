@@ -26,6 +26,21 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Arms the scroll-reveal hidden state before first paint, and disarms it if
+ * nothing claims it.
+ *
+ * Hiding content in CSS is only safe while something is guaranteed to unhide
+ * it. `ScrollReveal` does that on mount, so the hidden state must not outlive
+ * a page where React never mounts — a chunk that fails to load, or a host that
+ * serves the export from a path the App Router will not hydrate under. Either
+ * way the page would render blank. So the timer drops the class unless
+ * `ScrollReveal` has set the flag, and the page falls back to plain content.
+ */
+const REVEAL_BOOTSTRAP = `(function(){var d=document.documentElement;
+d.classList.add('reveal-ready');
+setTimeout(function(){if(d.dataset.reveal!=='on')d.classList.remove('reveal-ready')},2000)})()`;
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -35,8 +50,7 @@ export default function RootLayout({
         {/* Runs before first paint; see the reveal block in globals.css. */}
         <script
           dangerouslySetInnerHTML={{
-            __html:
-              "document.documentElement.classList.add('reveal-ready')",
+            __html: REVEAL_BOOTSTRAP,
           }}
         />
       </head>

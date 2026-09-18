@@ -11,6 +11,10 @@ import { useEffect } from "react";
  */
 export function ScrollReveal() {
   useEffect(() => {
+    // Tells the bootstrap script in the document head that the hidden state is
+    // claimed, so it stops its fallback from disarming it.
+    document.documentElement.dataset.reveal = "on";
+
     const nodes = Array.from(
       document.querySelectorAll<HTMLElement>("[data-reveal]"),
     );
