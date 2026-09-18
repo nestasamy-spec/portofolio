@@ -276,12 +276,12 @@ export const site: SiteContent = {
   results: {
     label: "Proven results",
     heading: "Turning complex challenges into measurable impact.",
-    body: "Selected results from recent projects.",
+    body: "Estimated impact from recent enterprise and fintech projects.",
     items: [
-      { value: "+38%", label: "Operational efficiency" },
-      { value: "50%", label: "Reduction in critical user errors" },
-      { value: "10k+", label: "Daily active users" },
-      { value: "90%", label: "Client satisfaction" },
+      { value: "50–60%", label: "Less time on research and early prototyping" },
+      { value: "40–50%", label: "Faster early-stage concept turnaround" },
+      { value: "25–30%", label: "Faster new-screen design turnaround" },
+      { value: "20–25%", label: "Less design-to-development handoff time" },
     ],
   },
 
@@ -311,7 +311,7 @@ export const site: SiteContent = {
     primary: { label: "Let's talk", href: "mailto:nesta.samy@live.com" },
   },
 
-  cv: { href: "", label: "Download CV" },
+  cv: { href: "/AbdelRahman-Samy-CV.pdf", label: "Download CV" },
 
   about: {
     label: "About",

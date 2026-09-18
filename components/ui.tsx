@@ -26,15 +26,19 @@ export function Button({
   children: ReactNode;
   className?: string;
 }) {
-  const external = href.startsWith("http") || href.startsWith("mailto:");
+  const isMail = href.startsWith("mailto:") || href.startsWith("tel:");
+  const isPdf = href.endsWith(".pdf");
+  const external = href.startsWith("http");
   const cls = `${base} ${variants[variant]} ${className}`;
 
-  if (external || href.endsWith(".pdf")) {
+  if (external || isMail || isPdf) {
+    // PDFs and external destinations open in a new tab so the page is not lost.
+    const newTab = external || isPdf;
     return (
       <a
         href={href}
         className={cls}
-        {...(external ? { target: "_blank", rel: "noreferrer noopener" } : {})}
+        {...(newTab ? { target: "_blank", rel: "noreferrer noopener" } : {})}
       >
         {children}
       </a>

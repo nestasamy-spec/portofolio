@@ -41,10 +41,11 @@ Colours, type scale and easing are defined once as Tailwind v4 `@theme` tokens
 in `app/globals.css`. The palette is deliberately monochrome; colour comes from
 project imagery only.
 
-### Adding a CV
+### The CV
 
-`site.cv.href` is empty, and every "Download CV" button is hidden while it is.
-To enable: add the file at `public/cv.pdf` and set `cv.href` to `"/cv.pdf"`.
+`public/AbdelRahman-Samy-CV.pdf` is the downloadable CV, wired through
+`site.cv.href`. To replace it, drop in the new file and update that path. Set
+`cv.href` to an empty string to hide every "Download CV" button.
 
 ### Scroll reveal
 
