@@ -69,6 +69,10 @@ export const site: SiteContent = {
     strap: "AbdelRahman · Product Design",
     name: "AbdelRahman Samy",
     bio: "A senior product designer for fintech, government and enterprise. Complex challenges, simple experiences.",
+    photo: {
+      src: "/portrait.webp",
+      alt: "AbdelRahman Samy at his desk",
+    },
     initials: "AS",
     role: "Senior Product Designer",
     experience: "8+ years exp.",
@@ -91,6 +95,13 @@ export const site: SiteContent = {
         value: "in/abdelrahman-samy",
         href: "https://linkedin.com/in/abdelrahman-samy",
         icon: "linkedin",
+      },
+      // Waiting on the profile URL; the row stays off the badge until it is set.
+      {
+        label: "Behance",
+        value: "",
+        href: "",
+        icon: "behance",
       },
     ],
     availability: "Egypt · Open to remote",

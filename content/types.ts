@@ -96,8 +96,9 @@ export interface BadgeLink {
   label: string;
   /** What the reader sees, e.g. "in/abdelrahman-samy". */
   value: string;
+  /** Empty hides the row, so a profile can be listed before its URL is known. */
   href: string;
-  icon: "mail" | "phone" | "linkedin";
+  icon: "mail" | "phone" | "linkedin" | "behance";
 }
 
 /**

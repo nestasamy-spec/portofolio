@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { site } from "@/content/site";
 import type { BadgeLink } from "@/content/types";
-import { LinkedInIcon, MailIcon, PhoneIcon } from "./icons";
+import { BehanceIcon, LinkedInIcon, MailIcon, PhoneIcon } from "./icons";
 
 const linkIcons = {
   mail: MailIcon,
   phone: PhoneIcon,
   linkedin: LinkedInIcon,
+  behance: BehanceIcon,
 } as const;
 
 function LinkRow({ link }: { link: BadgeLink }) {
@@ -15,7 +16,7 @@ function LinkRow({ link }: { link: BadgeLink }) {
     <li>
       <a href={link.href} className="badge-row">
         <span aria-hidden className="badge-row-icon">
-          <Icon className="h-[13px] w-[13px]" />
+          <Icon className="h-[15px] w-[15px]" />
         </span>
         <span className="min-w-0">
           <span className="badge-row-label">{link.label}</span>
@@ -95,15 +96,17 @@ export function LanyardBadge() {
             <label htmlFor="badge-flip" className="badge-hit" />
 
             <span aria-hidden className="badge-back-icon">
-              <MailIcon className="h-4 w-4" />
+              <MailIcon className="h-5 w-5" />
             </span>
             <p className="badge-back-heading">{badge.backHeading}</p>
             <span aria-hidden className="badge-rule" />
 
             <ul className="badge-rows">
-              {badge.links.map((link) => (
-                <LinkRow key={link.href} link={link} />
-              ))}
+              {badge.links
+                .filter((link) => link.href)
+                .map((link) => (
+                  <LinkRow key={link.href} link={link} />
+                ))}
             </ul>
 
             <p className="badge-foot">
