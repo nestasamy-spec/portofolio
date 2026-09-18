@@ -109,14 +109,19 @@ export interface Badge {
   /** Printed down the lanyard strap; repeated to fill it. */
   strap: string;
   name: string;
-  /** One or two short sentences on the front. */
-  bio: string;
+  /** One line under the name. */
+  role: string;
+  /** One short line under the role, in his own words. */
+  tagline: string;
+  /**
+   * The band across the foot of the front face — on a real pass, the issuing
+   * organisation. Anything already said in the hero below the badge does not
+   * belong here; the reader sees both at once.
+   */
+  band: string;
   /** Circular portrait. Omit and the badge falls back to `initials`. */
   photo?: { src: string; alt: string };
   initials: string;
-  /** The two lines at the foot of the front face. */
-  role: string;
-  experience: string;
   backHeading: string;
   links: BadgeLink[];
   /** Foot of the back face, e.g. "Egypt · Open to remote". */

@@ -66,9 +66,10 @@ export function LanyardBadge() {
           <div className="badge-face badge-front">
             <label htmlFor="badge-flip" className="badge-hit" />
 
-            <p className="badge-name">{badge.name}</p>
-            <p className="badge-bio">{badge.bio}</p>
-
+            {/*
+              Photo first, the way a pass you wear reads: the face identifies,
+              the name confirms it.
+            */}
             <span className="badge-portrait">
               {badge.photo ? (
                 <Image
@@ -86,9 +87,12 @@ export function LanyardBadge() {
               )}
             </span>
 
+            <p className="badge-name">{badge.name}</p>
+            <p className="badge-role">{badge.role}</p>
+            <p className="badge-tagline">{badge.tagline}</p>
+
             <p className="badge-foot">
-              <span>{badge.role}</span>
-              <span>{badge.experience}</span>
+              <span>{badge.band}</span>
             </p>
           </div>
 

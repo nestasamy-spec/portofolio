@@ -61,21 +61,25 @@ export const site: SiteContent = {
   // Cryptocurrency Wallet asset (/work/cryptocurrency-wallet.avif) is in the
   // repo and ready to add as a fourth case study.
   /**
-   * AUTHORED for the hanging badge. `bio`'s second sentence is his own line
+   * AUTHORED for the hanging badge, except `tagline`, which is his own line
    * from the hero annotation. `initials` is the fallback mark, drawn only if
    * `photo` is ever removed.
+   *
+   * The front deliberately carries no years, sectors or disciplines: the
+   * eyebrow and the stat row directly beneath it already say all three, and
+   * the reader takes in the badge and those in one glance.
    */
   badge: {
-    strap: "AbdelRahman · Product Design",
+    strap: "AbdelRahman Samy",
     name: "AbdelRahman Samy",
-    bio: "A senior product designer for fintech, government and enterprise. Complex challenges, simple experiences.",
+    role: "Senior Product Designer",
+    tagline: "Complex challenges. Simple experiences.",
+    band: "Product Design · AI",
     photo: {
       src: "/portrait.webp",
       alt: "AbdelRahman Samy at his desk",
     },
     initials: "AS",
-    role: "Senior Product Designer",
-    experience: "8+ years exp.",
     backHeading: "Get in touch",
     links: [
       {
