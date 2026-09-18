@@ -129,6 +129,15 @@
   .badge-stage {
     display: flex;
     justify-content: center;
+    /*
+     * Pulled above the section's top edge so the strap is clipped well inside
+     * the frame. Sitting flush with it, the ribbon read as chopped off rather
+     * than as running on past the top of the page. The strap reads the lift
+     * too, so the two stay in step: whatever is pulled out of view is added
+     * back to the plain band of ribbon above the first letter.
+     */
+    --badge-lift: 1.25rem;
+    margin-top: calc(-1 * var(--badge-lift));
   }
 
   .badge-swing {
@@ -167,11 +176,20 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     line-height: 1.9rem;
+    /*
+     * Holds the first letter clear of the clip. A glyph sliced exactly at the
+     * frame edge reads as a mistake; a plain band of ribbon reads as a ribbon.
+     */
+    padding-top: calc(var(--badge-lift) + 0.9rem);
   }
 
   @media (min-width: 768px) {
     .badge-swing {
       --badge-strap: 11rem;
+    }
+
+    .badge-stage {
+      --badge-lift: 2.25rem;
     }
   }
 
