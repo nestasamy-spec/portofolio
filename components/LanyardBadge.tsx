@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import { useState } from "react";
 import { site } from "@/content/site";
 import type { BadgeLink } from "@/content/types";
 import { LinkedInIcon, MailIcon, PhoneIcon } from "./icons";
@@ -31,19 +28,21 @@ function LinkRow({ link }: { link: BadgeLink }) {
 
 /**
  * The hero's hanging ID badge: a lanyard strap, a clip, and a card that swings
- * and flips to its contact side on click.
+ * and turns over to its contact side.
  *
- * Both faces are always in the DOM so the flip is a CSS transform rather than a
- * re-render. The face turned away is `inert`, which keeps its links out of the
- * tab order and away from screen readers without a second source of truth.
+ * The flip is a checkbox and two labels rather than React state, so this stays
+ * a server component and the badge works with no JavaScript at all — which
+ * also means it survives any host that serves the export without hydrating it.
  *
- * Each face carries a full-size button underneath its content, so a click
- * anywhere flips the card while the contact links on the back still take their
- * own clicks. That button is also what makes the badge keyboard-operable.
+ * Both faces are always in the DOM. `backface-visibility` hides the one turned
+ * away, and `visibility` — switched at the halfway point of the turn — takes
+ * its links out of the tab order to match.
+ *
+ * Each face's label covers the whole card, so a click anywhere turns it while
+ * the contact links on the back, which sit above the label, keep their own.
  */
 export function LanyardBadge() {
   const { badge } = site;
-  const [flipped, setFlipped] = useState(false);
 
   return (
     <div className="badge-stage">
@@ -55,15 +54,16 @@ export function LanyardBadge() {
         </span>
         <span aria-hidden className="badge-clip" />
 
-        <div className={`badge-card${flipped ? " is-flipped" : ""}`}>
-          <div className="badge-face badge-front" inert={flipped}>
-            <button
-              type="button"
-              className="badge-hit"
-              onClick={() => setFlipped(true)}
-            >
-              <span className="sr-only">{badge.flip.toBack}</span>
-            </button>
+        <input
+          type="checkbox"
+          id="badge-flip"
+          className="badge-toggle"
+          aria-label={badge.flip.toBack}
+        />
+
+        <div className="badge-card">
+          <div className="badge-face badge-front">
+            <label htmlFor="badge-flip" className="badge-hit" />
 
             <p className="badge-name">{badge.name}</p>
             <p className="badge-bio">{badge.bio}</p>
@@ -91,14 +91,8 @@ export function LanyardBadge() {
             </p>
           </div>
 
-          <div className="badge-face badge-back" inert={!flipped}>
-            <button
-              type="button"
-              className="badge-hit"
-              onClick={() => setFlipped(false)}
-            >
-              <span className="sr-only">{badge.flip.toFront}</span>
-            </button>
+          <div className="badge-face badge-back">
+            <label htmlFor="badge-flip" className="badge-hit" />
 
             <span aria-hidden className="badge-back-icon">
               <MailIcon className="h-4 w-4" />
