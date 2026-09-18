@@ -5,8 +5,12 @@ import type { SiteContent } from "./types";
  *
  * - Contact details, the Zain KSA / TheLOCTech / PaySky entries and the
  *   AI-Assisted Design & Delivery card come from AbdelRahman's written brief.
- * - AMANAH, BL80 and Vnu Mngr descriptions, the stats, results and expertise
- *   copy are transcribed verbatim from the previous site.
+ * - AMANAH, BL80 and Vnu Mngr descriptions, the hero stats and the expertise
+ *   copy are transcribed verbatim from the previous site, except the fourth
+ *   hero stat: the previous site's "90% client satisfaction" had no source, so
+ *   it is replaced with a count of the industries the career section below
+ *   actually covers (telecom, fintech, government, healthcare, SaaS).
+ * - The Proven Results figures come from the CV.
  * - Section framing ("Selected Work", "What I Design", …) follows the reference
  *   design. Items marked AUTHORED below were written for this build because the
  *   reference has a slot the previous site had no copy for.
@@ -49,7 +53,7 @@ export const site: SiteContent = {
       { value: "8+", label: "Years of experience" },
       { value: "30+", label: "Products shipped" },
       { value: "20+", label: "Clients across MENA & global markets" },
-      { value: "90%", label: "Client satisfaction" },
+      { value: "5", label: "Industries designed for" },
     ],
   },
 
