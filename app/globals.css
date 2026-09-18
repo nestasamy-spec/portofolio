@@ -132,7 +132,8 @@
   }
 
   .badge-swing {
-    --badge-strap: 9rem;
+    /* long enough to run off the top of the section rather than start in it */
+    --badge-strap: 6.5rem;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -160,6 +161,12 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     line-height: 1.625rem;
+  }
+
+  @media (min-width: 768px) {
+    .badge-swing {
+      --badge-strap: 11rem;
+    }
   }
 
   .badge-strap-text {
