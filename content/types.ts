@@ -1,46 +1,58 @@
 /**
- * Content model for the portfolio site.
+ * Content model for the portfolio.
  *
- * All page copy lives in `content/site.ts` behind these interfaces so a CMS or
- * Supabase layer can be dropped in later without touching any component: swap
- * the static export for an async loader returning the same shapes.
+ * All copy lives in `content/site.ts` behind these interfaces so a CMS or
+ * Supabase layer can replace the static export later without touching a single
+ * component: swap the export for an async loader returning the same shapes.
  */
+
+export interface NavLink {
+  label: string;
+  href: string;
+}
 
 export interface Stat {
   value: string;
   label: string;
-  caption: string;
 }
 
-export interface ExpertiseCard {
+export interface Hero {
+  eyebrow: string[];
+  headline: string;
+  intro: string;
+  primaryCta: NavLink;
+  secondaryCta: NavLink;
+  annotation: string;
+  /** Lead visual, shown alongside the copy. */
+  image: { src: string; alt: string; width: number; height: number };
+  stats: Stat[];
+}
+
+export interface WorkItem {
+  /** Small categorisation eyebrow, e.g. ["Government", "Payments"]. */
+  tags: string[];
   title: string;
-  /** Distinct, card-specific capabilities. Rendered as a bullet list. */
-  bullets: string[];
+  description: string;
+  image: string;
+  href?: string;
+}
+
+export interface ExpertiseItem {
+  title: string;
+  description: string;
+  /** Key into the icon map in `components/icons.tsx`. */
+  icon: string;
 }
 
 export interface CareerEntry {
-  company: string;
-  role: string;
-  /** Display string, e.g. "Nov 2024 – Present". */
   dates: string;
+  role: string;
+  company: string;
   location: string;
-  /** e.g. "Freelance". Omitted when the role is a standard full-time position. */
+  /** e.g. "Freelance" — omitted for standard full-time roles. */
   employmentType?: string;
   description: string;
-  /** Company website, as linked on the original site. */
-  href?: string;
   logo?: string;
-}
-
-export interface Project {
-  title: string;
-  description: string;
-  image?: string;
-}
-
-export interface PhilosophyPillar {
-  title: string;
-  description: string;
 }
 
 export interface Result {
@@ -48,22 +60,37 @@ export interface Result {
   label: string;
 }
 
-export interface ContactDetails {
-  email: string;
-  phone: string;
-  linkedin: string;
-  linkedinLabel: string;
+export interface Tool {
+  name: string;
+  /** Short form used inside the tile mark. */
+  abbr: string;
+}
+
+export interface SectionIntro {
+  label: string;
+  heading: string;
+  body?: string;
+  cta?: NavLink;
 }
 
 export interface SiteContent {
-  nav: { label: string; href: string }[];
-  hero: { headline: string; subheadline: string; ctaLabel: string; ctaHref: string };
-  stats: Stat[];
-  expertise: { heading: string; cards: ExpertiseCard[] };
-  career: { heading: string; entries: CareerEntry[] };
-  projects: { heading: string; items: Project[] };
-  philosophy: { heading: string; quote: string; pillars: PhilosophyPillar[] };
-  capabilities: { heading: string; items: string[] };
-  results: { heading: string; items: Result[] };
-  contact: { heading: string; details: ContactDetails };
+  meta: { name: string; role: string; title: string; description: string };
+  nav: NavLink[];
+  navCta: NavLink;
+  hero: Hero;
+  work: SectionIntro & { items: WorkItem[] };
+  expertise: SectionIntro & { items: ExpertiseItem[] };
+  career: SectionIntro & { entries: CareerEntry[] };
+  philosophy: { label: string; heading: string; principles: string[]; body: string };
+  results: SectionIntro & { items: Result[] };
+  tools: SectionIntro & { items: Tool[] };
+  cta: { label: string; heading: string; body: string; primary: NavLink };
+  /**
+   * CV download. `href` is empty until a PDF is added — every Download CV
+   * button is hidden while it is, so the site never links to a missing file.
+   * To enable: drop the file at `public/cv.pdf` and set href to "/cv.pdf".
+   */
+  cv: { href: string; label: string };
+  contact: { email: string; phone: string; linkedin: string; linkedinLabel: string };
+  footer: { tagline: string; copyright: string };
 }

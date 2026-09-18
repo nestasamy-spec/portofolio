@@ -1,26 +1,116 @@
 @import "tailwindcss";
 
 /*
- * Design tokens are intentionally minimal at this stage.
- * They will be replaced wholesale with the exact values extracted from the
- * live site (colors, type scale, spacing) once browser extraction is possible.
+ * Monochrome editorial system taken from the reference design: near-black ink,
+ * warm-neutral surfaces, a single hairline border colour, and colour supplied
+ * only by project imagery.
  */
-:root {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
+@theme {
+  --color-ink: #111111;
+  --color-ink-soft: #1c1c1c;
+  --color-body: #5c5c5c;
+  --color-muted: #8c8c8c;
+  --color-line: #e6e5e3;
+  --color-line-dark: #2a2a2a;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f6f6f4;
+  --color-surface-dark: #111111;
+
+  --text-display: 4rem;
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.032em;
+
+  --text-h2: 2.25rem;
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.022em;
+
+  --text-label: 0.6875rem;
+  --text-label--line-height: 1;
+  --text-label--letter-spacing: 0.14em;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* clears the sticky header when jumping to an anchor */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+@layer components {
+  /* Page gutter + max width, shared by every section. */
+  .shell {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Small uppercase section label above each heading. */
+  .eyebrow {
+    font-size: var(--text-label);
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    font-weight: 500;
+  }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  -webkit-font-smoothing: antialiased;
+/*
+ * Scroll-reveal.
+ *
+ * The hidden state is scoped to `.reveal-ready`, which an inline script in the
+ * document head adds before first paint. If that script never runs — JS off, a
+ * bundle error — the class is absent and every section renders plainly visible
+ * rather than being stranded at opacity 0.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s var(--ease-out-soft),
+      transform 0.7s var(--ease-out-soft);
+  }
+
+  .reveal-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Printing (and any full-page capture) must never inherit the hidden state. */
+@media print {
+  .reveal-ready [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }

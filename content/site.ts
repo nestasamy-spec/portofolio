@@ -3,245 +3,261 @@ import type { SiteContent } from "./types";
 /**
  * PROVENANCE
  *
- * - `contact`, `career` entries a–c, `expertise` and the AI-Assisted card are
- *   authored from AbdelRahman's written spec and are final.
- * - Everything else (hero, stats, projects, philosophy, capabilities, results,
- *   and career entries d–f) is transcribed from a text-only fetch of the live
- *   site, which summarises rather than reproducing the DOM verbatim. These are
- *   marked `NEEDS VERBATIM CHECK` and must be re-confirmed against the live
- *   site before launch.
+ * - Contact details, the Zain KSA / TheLOCTech / PaySky entries and the
+ *   AI-Assisted Design & Delivery card come from AbdelRahman's written brief.
+ * - AMANAH, BL80 and Vnu Mngr descriptions, the stats, results and expertise
+ *   copy are transcribed verbatim from the previous site.
+ * - Section framing ("Selected Work", "What I Design", …) follows the reference
+ *   design. Items marked AUTHORED below were written for this build because the
+ *   reference has a slot the previous site had no copy for.
  */
 
 export const site: SiteContent = {
-  nav: [
-    { label: "Expertise", href: "#expertise" },
-    { label: "Career Journey", href: "#career" },
-    { label: "Projects", href: "#projects" },
-    { label: "Design Philosophy", href: "#philosophy" },
-    { label: "Get in touch", href: "#contact" },
-  ],
-
-  // NEEDS VERBATIM CHECK
-  hero: {
-    headline: "Designing enterprise-grade digital products that scale.",
-    subheadline:
-      "Senior Product Designer helping organizations turn complex systems into usable, measurable business outcomes.",
-    ctaLabel: "Get in touch",
-    ctaHref: "#contact",
+  meta: {
+    name: "AbdelRahman Samy",
+    role: "Senior Product Designer",
+    title: "AbdelRahman Samy — Senior Product Designer | Fintech & Enterprise",
+    description:
+      "Senior Product Designer with 8+ years designing fintech, government and enterprise products across MENA and global markets.",
   },
 
-  // NEEDS VERBATIM CHECK
-  stats: [
-    { value: "8+", label: "Years Experience", caption: "Enterprise & SaaS products" },
-    { value: "30+", label: "Products Shipped", caption: "across regulated industries" },
-    { value: "20+", label: "Clients", caption: "across MENA & global markets" },
-    { value: "90%", label: "Client satisfaction", caption: "internal NPS & feedback" },
+  nav: [
+    { label: "Home", href: "#top" },
+    { label: "Work", href: "#work" },
+    { label: "Expertise", href: "#expertise" },
+    { label: "Experience", href: "#experience" },
+    { label: "Contact", href: "#contact" },
   ],
+  navCta: { label: "Let's work together", href: "#contact" },
 
-  // Rewritten per spec: the live site repeats one generic bullet list under
-  // every card. Each card now carries bullets specific to its own heading.
+  hero: {
+    eyebrow: ["Product Design", "Fintech", "Government", "Enterprise", "MENA"],
+    headline: "Designing enterprise-grade digital products that scale.",
+    intro:
+      "I'm AbdelRahman Samy, a Senior Product Designer with 8+ years of experience designing digital products for fintech, government and enterprise companies across MENA and global markets.",
+    primaryCta: { label: "View selected work", href: "#work" },
+    secondaryCta: { label: "Get in touch", href: "#contact" },
+    annotation: "Complex challenges. Simple experiences.",
+    image: {
+      src: "/work/hero-devices.webp",
+      alt: "Government Collection System dashboards across desktop and mobile",
+      width: 1215,
+      height: 842,
+    },
+    stats: [
+      { value: "8+", label: "Years of experience" },
+      { value: "30+", label: "Products shipped" },
+      { value: "20+", label: "Clients across MENA & global markets" },
+      { value: "90%", label: "Client satisfaction" },
+    ],
+  },
+
+  // Three featured projects, matching the reference layout. The
+  // Cryptocurrency Wallet asset (/work/cryptocurrency-wallet.avif) is in the
+  // repo and ready to add as a fourth case study.
+  work: {
+    label: "Featured work",
+    heading: "Selected Work",
+    items: [
+      {
+        tags: ["Government", "Payments"],
+        title: "Government Collection System",
+        description:
+          "National-scale platform for managing government services, fees and digital payments across African markets.",
+        image: "/work/government-collection-system.avif",
+      },
+      {
+        tags: ["Fintech", "Merchants"],
+        title: "Merchant Super App",
+        description:
+          "Payments, commerce, disbursements and financial management for merchants across MENA.",
+        image: "/work/merchant-super-app.avif",
+      },
+      {
+        tags: ["Fintech", "SDK"],
+        title: "Digital Wallet & SDK",
+        description:
+          "A modular SDK-first wallet ecosystem for secure transactions, bill payments and multi-market financial services.",
+        image: "/work/digital-wallet-sdk.avif",
+      },
+    ],
+  },
+
   expertise: {
-    heading: "Areas of Expertise",
-    cards: [
+    label: "Expertise",
+    heading: "What I Design",
+    body: "I help companies turn complex business requirements into simple, scalable and human-centered experiences.",
+    items: [
       {
         title: "Product Strategy",
-        bullets: [
-          "Product vision and roadmap definition",
-          "Stakeholder alignment workshops",
-          "Translating business goals into design direction",
-          "Opportunity sizing and prioritisation",
-          "Success metrics and measurement plans",
-        ],
+        description:
+          "Defining product vision, aligning stakeholders, and translating business goals into clear design direction.",
+        icon: "strategy",
       },
       {
         title: "UX/UI Design",
-        bullets: [
-          "User research and journey mapping",
-          "Information architecture",
-          "Interaction and interface design",
-          "Prototyping and usability testing",
-          "Accessibility and inclusive design",
-        ],
+        description:
+          "Designing intuitive, accessible interfaces for complex systems used daily by large user bases.",
+        icon: "design",
       },
       {
         title: "Enterprise Systems",
-        bullets: [
-          "Multi-role, multi-permission platforms",
-          "Admin consoles and back-office tooling",
-          "Complex data tables and dashboards",
-          "Workflow and approval-chain design",
-          "Migration from legacy interfaces",
-        ],
-      },
-      {
-        title: "Innovation",
-        bullets: [
-          "Emerging interaction patterns",
-          "Concept exploration and rapid prototyping",
-          "Design sprints and discovery workshops",
-          "Proof-of-concept validation",
-          "Technology scouting for product fit",
-        ],
+        description:
+          "Building scalable design solutions for multi-role, multi-permission, regulation-heavy platforms.",
+        icon: "systems",
       },
       {
         title: "Design Systems",
-        bullets: [
-          "Component library architecture",
-          "Design tokens and theming",
-          "Documentation and adoption guidelines",
-          "Cross-team governance and contribution",
-          "Design-to-code handoff pipelines",
-        ],
+        description:
+          "Creating and evolving design systems that support speed, consistency, and cross-team collaboration.",
+        icon: "tokens",
+      },
+      {
+        title: "Innovation",
+        description:
+          "Exploring new interaction patterns and emerging technologies to solve real user and business problems.",
+        icon: "spark",
       },
       {
         title: "Fintech Platforms",
-        bullets: [
-          "Payments and transaction flows",
-          "Digital wallets and merchant tools",
-          "KYC, onboarding and compliance journeys",
-          "Financial dashboards and reconciliation",
-          "Regulated, multi-market rollouts",
-        ],
+        description:
+          "Payments, wallets, merchant tools, and financial workflows designed for accuracy, trust, and scale.",
+        icon: "wallet",
       },
       {
         title: "AI-Assisted Design & Delivery",
-        bullets: [
+        description:
           "Using Figma AI, Lovable, Midjourney, ChatGPT, and Claude to speed up ideation, prototyping, and parts of the front-end build.",
-        ],
+        icon: "ai",
       },
     ],
   },
 
   career: {
+    label: "Experience",
     heading: "Career Journey",
+    body: "A journey across fintech, telecom, government and enterprise products.",
     entries: [
       {
-        company: "Zain KSA",
+        dates: "Nov 2024 — Present",
         role: "Senior Product Designer",
-        dates: "Nov 2024 – Present",
+        company: "Zain KSA",
         location: "Saudi Arabia",
         description:
           "Lead product design for Zain Direct, an enterprise digital workplace unifying communication, ticketing, and operations for 1,000+ employees across Web, Android, iOS, and PWA. Also contribute to the redesign of Zain's main corporate website — starting with the B2B experience before extending to B2C — using AI image-generation and design tools (Midjourney, Figma AI, Figma Make, Lovable) to speed up visuals and early concepts.",
       },
       {
-        company: "TheLOCTech",
+        dates: "Jan 2024 — Present",
         role: "Product Design Lead",
-        dates: "Jan 2024 – Present",
+        company: "TheLOCTech",
         location: "Saudi Arabia",
         employmentType: "Freelance",
+        logo: "/logos/loctech.avif",
         description:
           "Own product design strategy across a portfolio of 5+ enterprise and platform products for clients in the GCC and Turkey, leading initiatives from discovery to production and mentoring designers. Embed AI tools (ChatGPT, Claude, Midjourney, Lovable) into research, moodboarding, and prototyping — and use Claude for AI-assisted front-end coding to turn concepts into functional prototypes faster.",
       },
       {
-        company: "PaySky Inc.",
+        dates: "Sep 2022 — Nov 2024",
         role: "Senior Product Designer",
-        dates: "Sep 2022 – Nov 2024",
+        company: "PaySky Inc.",
         location: "Egypt",
+        logo: "/logos/paysky.avif",
         description:
           "Designed fintech and payment solutions used across multiple countries, including the Government Collection System (GCS) for African markets. Led UI/UX for the Yalla Super App across Egypt, UAE, KSA, and Pakistan, delivering merchant and consumer experiences through user-centered design and cross-functional collaboration.",
       },
       {
+        dates: "Feb 2022 — Feb 2023",
+        role: "UI/UX Designer",
         company: "AMANAH TEKNOLOGIA",
-        role: "UI/UX Designer",
-        dates: "Feb 2022 – Feb 2023",
         location: "Kuwait",
-        // NEEDS VERBATIM CHECK — keep as on the live site
+        logo: "/logos/amanah.avif",
         description:
-          "Designed healthcare software focusing on accessibility and EHR interoperability.",
+          "Designed healthcare software with a strong focus on accessibility, inclusivity, and interoperability with existing EHR systems. Worked directly with doctors and technical teams to ensure real-world usability.",
       },
       {
-        company: "BL80 Production LLC",
+        dates: "Nov 2021 — Jun 2022",
         role: "UI/UX Designer",
-        dates: "Nov 2021 – Jun 2022",
+        company: "BL80 Production LLC",
         location: "United States",
-        // NEEDS VERBATIM CHECK — keep as on the live site
-        description: "Led UI/UX for crypto wallet and NFT marketplace.",
-      },
-      {
-        company: "Vnu Mngr",
-        role: "Web Designer",
-        dates: "Mar 2017 – May 2021",
-        location: "United States",
-        // NEEDS VERBATIM CHECK — keep as on the live site
-        description: "Led design for restaurant/venue management software.",
-      },
-    ],
-  },
-
-  // NEEDS VERBATIM CHECK
-  projects: {
-    heading: "Flagship Projects",
-    items: [
-      {
-        title: "Government Collection System",
-        description: "National-scale platform for public revenue collection",
-      },
-      {
-        title: "Merchant Super App",
-        description: "Multi-service merchant platform for payments and operations",
-      },
-      {
-        title: "Digital Wallet App (SDK)",
-        description: "Secure transactions and financial services across MENA",
-      },
-    ],
-  },
-
-  // NEEDS VERBATIM CHECK
-  philosophy: {
-    heading: "Design Philosophy",
-    quote: "Design is a decision-making discipline.",
-    pillars: [
-      {
-        title: "User-Centered",
+        logo: "/logos/bl80.avif",
         description:
-          "Understanding behavior and pain points in high-stakes environments",
+          "Led UI/UX for a crypto wallet and NFT marketplace, balancing usability with security constraints such as authentication and key management.",
       },
       {
-        title: "Business-Driven",
-        description: "Connecting design to business goals and measurable outcomes",
-      },
-      {
-        title: "Built for Scale",
-        description: "Prioritizing systems that grow and adapt",
-      },
-      {
-        title: "Continuous Innovation",
-        description: "Exploring new patterns and technologies",
+        dates: "Mar 2017 — May 2021",
+        role: "Web Designer",
+        company: "Vnu Mngr",
+        location: "United States",
+        logo: "/logos/vnumngr.avif",
+        description:
+          "Leading the design of brand-driven management and CRM software for restaurants, bars, and nightlife venues, delivering cohesive brand identities, motion-enhanced interfaces, and user-centered tools for sales, marketing, and operations.",
       },
     ],
   },
 
-  // NEEDS VERBATIM CHECK
-  capabilities: {
-    heading: "Capabilities",
-    items: [
-      "Product Strategy & UX Architecture",
-      "Enterprise & Fintech Product Design",
-      "Design Systems & Scalable Components",
-      "Complex Workflows & Dashboards",
-      "Cross-functional Collaboration",
-      "Usability Testing & Iteration",
+  philosophy: {
+    label: "Design philosophy",
+    heading: "Design is a decision-making discipline.",
+    principles: [
+      "User-centered.",
+      "Business-driven.",
+      "Built for scale.",
+      "Continuously evolving.",
     ],
+    // AUTHORED — the reference has a paragraph slot; built from the previous
+    // site's philosophy pillars.
+    body: "Design is not about visuals, it's about making informed decisions under constraints. I combine user behaviour, business goals and technical realities to build systems that stay usable as products and organisations grow.",
   },
 
-  // NEEDS VERBATIM CHECK
   results: {
-    heading: "Proven Results",
+    label: "Proven results",
+    heading: "Turning complex challenges into measurable impact.",
+    body: "Selected results from recent projects.",
     items: [
-      { value: "+38%", label: "improvement in operational efficiency" },
-      { value: "50%", label: "reduction in critical user errors" },
-      { value: "10k+", label: "daily active users across systems" },
+      { value: "+38%", label: "Operational efficiency" },
+      { value: "50%", label: "Reduction in critical user errors" },
+      { value: "10k+", label: "Daily active users" },
+      { value: "90%", label: "Client satisfaction" },
     ],
   },
+
+  tools: {
+    label: "Tools & technologies",
+    heading: "Tools I Work With",
+    body: "From design to development, I work across the full product lifecycle.",
+    // AUTHORED — drawn from the tools named in AbdelRahman's brief.
+    items: [
+      { name: "Figma", abbr: "Fig" },
+      { name: "Figma AI", abbr: "AI" },
+      { name: "Figma Make", abbr: "Mk" },
+      { name: "Midjourney", abbr: "MJ" },
+      { name: "ChatGPT", abbr: "GPT" },
+      { name: "Claude", abbr: "Cl" },
+      { name: "Lovable", abbr: "Lv" },
+      { name: "Webflow", abbr: "Wf" },
+      { name: "Next.js", abbr: "N" },
+      { name: "React", abbr: "Re" },
+    ],
+  },
+
+  cta: {
+    label: "Let's build together",
+    heading: "Have a project in mind?",
+    body: "I'm always open to discussing new opportunities, interesting projects or just a friendly chat about product design.",
+    primary: { label: "Let's talk", href: "mailto:nesta.samy@live.com" },
+  },
+
+  cv: { href: "", label: "Download CV" },
 
   contact: {
-    heading: "Start a project",
-    details: {
-      email: "nesta.samy@live.com",
-      phone: "+20 106 001 9016",
-      linkedin: "https://linkedin.com/in/abdelrahman-samy",
-      linkedinLabel: "linkedin.com/in/abdelrahman-samy",
-    },
+    email: "nesta.samy@live.com",
+    phone: "+20 106 001 9016",
+    linkedin: "https://linkedin.com/in/abdelrahman-samy",
+    linkedinLabel: "linkedin.com/in/abdelrahman-samy",
+  },
+
+  footer: {
+    tagline: "Designing a better digital tomorrow.",
+    copyright: "© 2026 AbdelRahman Samy. All rights reserved.",
   },
 };
