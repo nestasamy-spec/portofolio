@@ -34,8 +34,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* clears the sticky header when jumping to an anchor */
-    scroll-padding-top: 6rem;
+    /* clears the floating nav pill when jumping to an anchor */
+    scroll-padding-top: 5.5rem;
   }
 
   body {
@@ -461,5 +461,191 @@
   .badge-card,
   .badge-face {
     transition: none;
+  }
+}
+
+/*
+ * Floating navigation pill.
+ *
+ * Hidden while the reader is at the top of the page and revealed as they
+ * scroll, driven by a CSS scroll timeline so no scroll listener — and so no
+ * client component — is involved. The `@supports` guard matters: without it a
+ * browser that ignores `animation-timeline` would run the keyframes on the
+ * document timeline and the pill would fly in once and never respond again.
+ */
+@layer components {
+  .site-header {
+    position: fixed;
+    top: 0.85rem;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    padding-inline: 1rem;
+    pointer-events: none;
+  }
+
+  .nav-pill {
+    pointer-events: auto;
+    display: flex;
+    max-width: 100%;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    border: 1px solid rgb(17 17 17 / 0.07);
+    background: rgb(255 255 255 / 0.82);
+    padding: 0.3rem 0.35rem;
+    backdrop-filter: blur(14px) saturate(160%);
+    box-shadow:
+      0 1px 2px rgb(17 17 17 / 0.04),
+      0 14px 34px -18px rgb(17 17 17 / 0.4);
+  }
+
+  .nav-brand {
+    display: none;
+    align-items: center;
+    gap: 0.55rem;
+    padding-left: 0.3rem;
+  }
+
+  .nav-mark {
+    display: grid;
+    height: 1.85rem;
+    width: 1.85rem;
+    flex: none;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--color-ink);
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #fff;
+  }
+
+  .nav-brand-text {
+    display: block;
+    line-height: 1.15;
+  }
+
+  .nav-brand-name {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .nav-brand-role {
+    display: block;
+    font-size: 0.625rem;
+    color: var(--color-muted);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+    /* at narrow widths the links scroll rather than fold into a menu */
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  /*
+   * Only below the breakpoint where the brand and the call to action appear,
+   * because that is the width at which the links outrun the pill. The fade
+   * says there is more to the right; above it the links fit and a fade would
+   * just dim the last one for nothing.
+   */
+  @media (max-width: 639px) {
+    .nav-links {
+      mask-image: linear-gradient(
+        90deg,
+        #000 0,
+        #000 calc(100% - 1.5rem),
+        transparent 100%
+      );
+    }
+  }
+
+  .nav-links a {
+    white-space: nowrap;
+    border-radius: 999px;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8125rem;
+    color: var(--color-body);
+    transition:
+      color 0.2s var(--ease-out-soft),
+      background-color 0.2s var(--ease-out-soft);
+  }
+
+  .nav-links a:hover {
+    background: rgb(17 17 17 / 0.05);
+    color: var(--color-ink);
+  }
+
+  .nav-cta {
+    display: none;
+    flex: none;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    background: var(--color-ink);
+    padding: 0.5rem 0.9rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #fff;
+    transition: background-color 0.2s var(--ease-out-soft);
+  }
+
+  .nav-cta:hover {
+    background: var(--color-ink-soft);
+  }
+
+  @media (min-width: 640px) {
+    .nav-brand {
+      display: flex;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+    }
+
+    .nav-pill {
+      gap: 0.75rem;
+      padding-right: 0.3rem;
+    }
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .site-header {
+    animation: nav-reveal linear both;
+    animation-timeline: scroll(root block);
+    /* clear of the fold before it appears, then a short slide */
+    animation-range: 64px 320px;
+  }
+
+  @keyframes nav-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(-140%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* A pill that slides about under the reader is worse than one that is just
+     there, so it is present from the start when motion is not wanted. */
+  @media (prefers-reduced-motion: reduce) {
+    .site-header {
+      animation: none;
+    }
   }
 }
