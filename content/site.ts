@@ -62,8 +62,8 @@ export const site: SiteContent = {
   // repo and ready to add as a fourth case study.
   /**
    * AUTHORED for the hanging badge. `bio`'s second sentence is his own line
-   * from the hero annotation; `photo` is left out until he supplies one, so
-   * the badge shows the initials mark instead.
+   * from the hero annotation. `initials` is the fallback mark, drawn only if
+   * `photo` is ever removed.
    */
   badge: {
     strap: "AbdelRahman · Product Design",
@@ -96,11 +96,10 @@ export const site: SiteContent = {
         href: "https://linkedin.com/in/abdelrahman-samy",
         icon: "linkedin",
       },
-      // Waiting on the profile URL; the row stays off the badge until it is set.
       {
         label: "Behance",
-        value: "",
-        href: "",
+        value: "AbdelRahmanSamy",
+        href: "https://www.behance.net/AbdelRahmanSamy",
         icon: "behance",
       },
     ],
