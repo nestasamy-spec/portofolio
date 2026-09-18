@@ -90,15 +90,55 @@ export interface SectionIntro {
   cta?: NavLink;
 }
 
+/** One contact row on the back of the lanyard badge. */
+export interface BadgeLink {
+  /** Small caps label above the value, e.g. "Email". */
+  label: string;
+  /** What the reader sees, e.g. "in/abdelrahman-samy". */
+  value: string;
+  href: string;
+  icon: "mail" | "phone" | "linkedin";
+}
+
+/**
+ * The hanging ID badge in the hero. It flips on click, so it carries two
+ * faces: the front introduces, the back is the contact card.
+ */
+export interface Badge {
+  /** Printed down the lanyard strap; repeated to fill it. */
+  strap: string;
+  name: string;
+  /** One or two short sentences on the front. */
+  bio: string;
+  /** Circular portrait. Omit and the badge falls back to `initials`. */
+  photo?: { src: string; alt: string };
+  initials: string;
+  /** The two lines at the foot of the front face. */
+  role: string;
+  experience: string;
+  backHeading: string;
+  links: BadgeLink[];
+  /** Foot of the back face, e.g. "Egypt · Open to remote". */
+  availability: string;
+  /** Labels the flip control, so the action is announced either way round. */
+  flip: { toBack: string; toFront: string };
+}
+
 export interface SiteContent {
   meta: { name: string; role: string; title: string; description: string };
   nav: NavLink[];
   navCta: NavLink;
   hero: Hero;
+  badge: Badge;
   work: SectionIntro & { items: WorkItem[] };
   expertise: SectionIntro & { items: ExpertiseItem[] };
   career: SectionIntro & { entries: CareerEntry[] };
-  philosophy: { label: string; heading: string; principles: string[]; body: string };
+  philosophy: {
+    label: string;
+    heading: string;
+    principles: string[];
+    body: string;
+  };
   results: SectionIntro & { items: Result[] };
   tools: SectionIntro & { items: Tool[] };
   cta: { label: string; heading: string; body: string; primary: NavLink };
@@ -116,6 +156,11 @@ export interface SiteContent {
     education: Education;
     languages: Language[];
   };
-  contact: { email: string; phone: string; linkedin: string; linkedinLabel: string };
+  contact: {
+    email: string;
+    phone: string;
+    linkedin: string;
+    linkedinLabel: string;
+  };
   footer: { tagline: string; copyright: string };
 }

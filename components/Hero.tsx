@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { site } from "@/content/site";
 import { Button } from "./ui";
+import { LanyardBadge } from "./LanyardBadge";
 import { ArrowRightIcon, DownloadIcon } from "./icons";
 
 export function Hero() {
@@ -64,21 +64,11 @@ export function Hero() {
         </div>
 
         <div className="relative" data-reveal data-reveal-delay="120">
-          <div className="overflow-hidden rounded-xl border border-line bg-white shadow-[0_24px_60px_-28px_rgba(17,17,17,0.28)]">
-            <Image
-              src={hero.image.src}
-              alt={hero.image.alt}
-              width={hero.image.width}
-              height={hero.image.height}
-              priority
-              sizes="(max-width: 1024px) 100vw, 55vw"
-              className="h-auto w-full"
-            />
-          </div>
+          <LanyardBadge />
 
           <p
             aria-hidden
-            className="mt-5 hidden text-right text-xl leading-tight text-muted lg:block font-[family-name:var(--font-caveat)]"
+            className="mt-7 text-center text-xl leading-tight text-muted font-[family-name:var(--font-caveat)]"
           >
             {hero.annotation}
           </p>

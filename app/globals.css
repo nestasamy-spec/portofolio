@@ -116,3 +116,297 @@
     transition: none !important;
   }
 }
+
+/*
+ * The hero's hanging ID badge.
+ *
+ * Three nested transforms that must not fight each other: `.badge-swing`
+ * carries the pendulum and the perspective for its children, `.badge-card`
+ * carries the flip, and each face carries its own backface. Perspective sits
+ * on the swing rather than the stage because it only reaches direct children.
+ */
+@layer components {
+  .badge-stage {
+    display: flex;
+    justify-content: center;
+  }
+
+  .badge-swing {
+    --badge-strap: 9rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* hangs from the top of the strap, not the middle of the card */
+    transform-origin: 50% 0;
+    perspective: 1200px;
+    will-change: transform;
+  }
+
+  .badge-strap {
+    display: block;
+    width: 1.625rem;
+    height: var(--badge-strap);
+    overflow: hidden;
+    background: var(--color-ink);
+    color: #fff;
+    /* reads top-to-bottom, letters turned onto their side */
+    writing-mode: vertical-rl;
+    /* without this the ribbon breaks the text into columns instead of one run */
+    white-space: nowrap;
+    text-align: center;
+    font-size: 0.5rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    line-height: 1.625rem;
+  }
+
+  .badge-strap-text {
+    opacity: 0.75;
+  }
+
+  /* the metal bar the strap threads through */
+  .badge-clip {
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin-top: -1px;
+    height: 0.9rem;
+    width: 2.25rem;
+    border-radius: 0.2rem;
+    background: linear-gradient(180deg, #f4f4f2, #c9c9c5 55%, #e8e8e5);
+    box-shadow: 0 1px 2px rgb(17 17 17 / 0.35);
+  }
+
+  .badge-clip::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 0.4rem;
+    width: 0.4rem;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    background: var(--color-surface-alt);
+    box-shadow: inset 0 1px 1px rgb(17 17 17 / 0.4);
+  }
+
+  .badge-card {
+    position: relative;
+    margin-top: -0.35rem;
+    width: clamp(15rem, 74vw, 20.5rem);
+    aspect-ratio: 5 / 7;
+    transform-style: preserve-3d;
+    transition: transform 0.75s var(--ease-out-soft);
+  }
+
+  .badge-card.is-flipped {
+    transform: rotateY(180deg);
+  }
+
+  .badge-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.75rem 1.5rem 1.5rem;
+    border-radius: 1.35rem;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background-color: #151515;
+    background-image:
+      linear-gradient(158deg, rgb(255 255 255 / 0.07), transparent 42%),
+      radial-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px);
+    background-size:
+      auto,
+      12px 12px;
+    box-shadow:
+      0 30px 60px -24px rgb(17 17 17 / 0.5),
+      inset 0 0 0 1px rgb(255 255 255 / 0.06);
+  }
+
+  .badge-back {
+    transform: rotateY(180deg);
+  }
+
+  /*
+   * Covers the whole face so a click anywhere flips it. The contact links sit
+   * above it, so they keep their own clicks.
+   */
+  .badge-hit {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    width: 100%;
+    border-radius: inherit;
+    cursor: pointer;
+    background: none;
+  }
+
+  .badge-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-align: center;
+  }
+
+  .badge-bio {
+    margin-top: 0.6rem;
+    max-width: 17rem;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: rgb(255 255 255 / 0.5);
+    text-align: center;
+    text-wrap: pretty;
+  }
+
+  .badge-portrait {
+    display: grid;
+    place-items: center;
+    margin-block: auto;
+    height: 10.5rem;
+    width: 10.5rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #202020;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.08),
+      0 12px 30px -12px rgb(0 0 0 / 0.8);
+  }
+
+  .badge-initials {
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: rgb(255 255 255 / 0.32);
+  }
+
+  .badge-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.42);
+    text-align: center;
+  }
+
+  /* the rows already take the slack above and below, so the foot needs none */
+  .badge-back .badge-foot {
+    margin-top: 0;
+    padding-top: 0.75rem;
+  }
+
+  .badge-back-icon {
+    display: grid;
+    place-items: center;
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.07);
+    color: rgb(255 255 255 / 0.75);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  }
+
+  .badge-back-heading {
+    margin-top: 0.85rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.62);
+  }
+
+  .badge-rule {
+    display: block;
+    margin-top: 0.85rem;
+    height: 1px;
+    width: 60%;
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  .badge-rows {
+    position: relative;
+    /* above `.badge-hit`, so a link click opens the link instead of flipping */
+    z-index: 3;
+    margin-block: auto;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .badge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-radius: 0.6rem;
+    padding: 0.25rem;
+    transition: background-color 0.2s var(--ease-out-soft);
+  }
+
+  .badge-row:hover {
+    background: rgb(255 255 255 / 0.05);
+  }
+
+  .badge-row-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    height: 1.85rem;
+    width: 1.85rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.08);
+    color: rgb(255 255 255 / 0.7);
+  }
+
+  .badge-row-label {
+    display: block;
+    font-size: 0.5625rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.42);
+  }
+
+  .badge-row-value {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.8125rem;
+    color: rgb(255 255 255 / 0.88);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .badge-swing {
+    animation: badge-swing 6s var(--ease-in-out-swing, ease-in-out) infinite
+      alternate;
+    /* starts part-way through so the badge is already mid-swing on load */
+    animation-delay: -2.4s;
+  }
+
+  @keyframes badge-swing {
+    from {
+      transform: rotate(-3.2deg);
+    }
+    to {
+      transform: rotate(3.2deg);
+    }
+  }
+}
+
+/* No swing, and the flip lands immediately rather than turning through 3D. */
+@media (prefers-reduced-motion: reduce) {
+  .badge-card {
+    transition: none;
+  }
+}

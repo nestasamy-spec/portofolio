@@ -60,6 +60,46 @@ export const site: SiteContent = {
   // Three featured projects, matching the reference layout. The
   // Cryptocurrency Wallet asset (/work/cryptocurrency-wallet.avif) is in the
   // repo and ready to add as a fourth case study.
+  /**
+   * AUTHORED for the hanging badge. `bio`'s second sentence is his own line
+   * from the hero annotation; `photo` is left out until he supplies one, so
+   * the badge shows the initials mark instead.
+   */
+  badge: {
+    strap: "AbdelRahman · Product Design",
+    name: "AbdelRahman Samy",
+    bio: "A senior product designer for fintech, government and enterprise. Complex challenges, simple experiences.",
+    initials: "AS",
+    role: "Senior Product Designer",
+    experience: "8+ years exp.",
+    backHeading: "Get in touch",
+    links: [
+      {
+        label: "Email",
+        value: "nesta.samy@live.com",
+        href: "mailto:nesta.samy@live.com",
+        icon: "mail",
+      },
+      {
+        label: "Phone",
+        value: "+20 106 001 9016",
+        href: "tel:+201060019016",
+        icon: "phone",
+      },
+      {
+        label: "LinkedIn",
+        value: "in/abdelrahman-samy",
+        href: "https://linkedin.com/in/abdelrahman-samy",
+        icon: "linkedin",
+      },
+    ],
+    availability: "Egypt · Open to remote",
+    flip: {
+      toBack: "Show contact details",
+      toFront: "Show profile",
+    },
+  },
+
   work: {
     label: "Featured work",
     heading: "Selected Work",
@@ -150,7 +190,8 @@ export const site: SiteContent = {
         location: "Saudi Arabia",
         employmentType: "Full-time",
         workMode: "Remote",
-        industry: "Telecom operator & digital service provider · 1,000–5,000 employees",
+        industry:
+          "Telecom operator & digital service provider · 1,000–5,000 employees",
         description:
           "Lead product design for Zain Direct, an enterprise digital workplace unifying communication, ticketing, workflows, and business operations into a single product ecosystem across Web, Android, iOS, and PWA.",
         contributions: [
