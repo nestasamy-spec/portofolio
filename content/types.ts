@@ -49,9 +49,15 @@ export interface CareerEntry {
   role: string;
   company: string;
   location: string;
-  /** e.g. "Freelance" — omitted for standard full-time roles. */
-  employmentType?: string;
+  /** "Full-time" | "Freelance" | "Part-time", as stated on the CV. */
+  employmentType: string;
+  /** "Remote" | "Hybrid" | "On-site". */
+  workMode: string;
+  /** Sector and company size, as stated on the CV. */
+  industry?: string;
   description: string;
+  /** "Key contributions" from the CV, rendered as a list. */
+  contributions: string[];
   logo?: string;
 }
 
@@ -64,6 +70,17 @@ export interface Tool {
   name: string;
   /** Short form used inside the tile mark. */
   abbr: string;
+}
+
+export interface Education {
+  qualification: string;
+  institution: string;
+  year: string;
+}
+
+export interface Language {
+  name: string;
+  level: string;
 }
 
 export interface SectionIntro {
@@ -91,6 +108,14 @@ export interface SiteContent {
    * To enable: drop the file at `public/cv.pdf` and set href to "/cv.pdf".
    */
   cv: { href: string; label: string };
+  about: {
+    label: string;
+    heading: string;
+    summary: string;
+    skills: string[];
+    education: Education;
+    languages: Language[];
+  };
   contact: { email: string; phone: string; linkedin: string; linkedinLabel: string };
   footer: { tagline: string; copyright: string };
 }

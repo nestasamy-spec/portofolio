@@ -54,11 +54,6 @@ export function CareerJourney() {
                 <div>
                   <h3 className="text-[0.9375rem] font-semibold tracking-[-0.01em] text-ink">
                     {entry.role}
-                    {entry.employmentType ? (
-                      <span className="ml-1.5 font-normal text-muted">
-                        ({entry.employmentType})
-                      </span>
-                    ) : null}
                   </h3>
                   <p className="mt-1.5 flex items-center gap-2 text-[0.875rem] text-body">
                     {entry.logo ? (
@@ -73,13 +68,33 @@ export function CareerJourney() {
                     {entry.company}
                   </p>
                   <p className="mt-1 text-[0.75rem] text-muted">
-                    {entry.location}
+                    {entry.location} &middot; {entry.employmentType} &middot;{" "}
+                    {entry.workMode}
                   </p>
+                  {entry.industry ? (
+                    <p className="mt-1 text-[0.6875rem] leading-snug text-muted/80 text-pretty">
+                      {entry.industry}
+                    </p>
+                  ) : null}
                 </div>
 
-                <p className="text-[0.8125rem] leading-relaxed text-body text-pretty lg:pt-0">
-                  {entry.description}
-                </p>
+                <div>
+                  <p className="text-[0.8125rem] leading-relaxed text-body text-pretty">
+                    {entry.description}
+                  </p>
+                  {entry.contributions.length ? (
+                    <ul className="mt-3 space-y-1.5">
+                      {entry.contributions.map((c) => (
+                        <li
+                          key={c}
+                          className="relative pl-4 text-[0.75rem] leading-relaxed text-muted text-pretty before:absolute before:left-0 before:top-[0.55em] before:h-[3px] before:w-[3px] before:rounded-full before:bg-muted"
+                        >
+                          {c}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
               </div>
             </li>
           ))}

@@ -28,7 +28,9 @@ docs/design-references/  target design and current QA screenshots
 
 ### Editing content
 
-All copy lives in `content/site.ts` behind the interfaces in `content/types.ts`.
+All copy lives in `content/site.ts` behind the interfaces in `content/types.ts`,
+and is sourced from AbdelRahman's CV — roles, dates, employment type, per-role
+contributions, skills, tools, education and languages.
 No component contains hard-coded text, so a CMS or Supabase layer can be added
 later by replacing that single export with an async loader returning the same
 shapes — components stay untouched.

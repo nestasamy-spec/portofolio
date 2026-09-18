@@ -26,6 +26,7 @@ export const site: SiteContent = {
     { label: "Work", href: "#work" },
     { label: "Expertise", href: "#expertise" },
     { label: "Experience", href: "#experience" },
+    { label: "About", href: "#about" },
     { label: "Contact", href: "#contact" },
   ],
   navCta: { label: "Let's work together", href: "#contact" },
@@ -34,7 +35,7 @@ export const site: SiteContent = {
     eyebrow: ["Product Design", "Fintech", "Government", "Enterprise", "MENA"],
     headline: "Designing enterprise-grade digital products that scale.",
     intro:
-      "I'm AbdelRahman Samy, a Senior Product Designer with 8+ years of experience designing digital products for fintech, government and enterprise companies across MENA and global markets.",
+      "I'm AbdelRahman Samy, a Senior Product Designer with 8+ years leading end-to-end design for enterprise and consumer products across telecom, fintech, government, healthcare and SaaS — for teams in the GCC, Turkey, Africa and the US.",
     primaryCta: { label: "View selected work", href: "#work" },
     secondaryCta: { label: "Get in touch", href: "#contact" },
     annotation: "Complex challenges. Simple experiences.",
@@ -136,15 +137,26 @@ export const site: SiteContent = {
   career: {
     label: "Experience",
     heading: "Career Journey",
-    body: "A journey across fintech, telecom, government and enterprise products.",
+    body: "A journey across telecom, fintech, government, healthcare and SaaS products.",
     entries: [
       {
         dates: "Nov 2024 — Present",
         role: "Senior Product Designer",
         company: "Zain KSA",
         location: "Saudi Arabia",
+        employmentType: "Full-time",
+        workMode: "Remote",
+        industry: "Telecom operator & digital service provider · 1,000–5,000 employees",
         description:
-          "Lead product design for Zain Direct, an enterprise digital workplace unifying communication, ticketing, and operations for 1,000+ employees across Web, Android, iOS, and PWA. Also contribute to the redesign of Zain's main corporate website — starting with the B2B experience before extending to B2C — using AI image-generation and design tools (Midjourney, Figma AI, Figma Make, Lovable) to speed up visuals and early concepts.",
+          "Lead product design for Zain Direct, an enterprise digital workplace unifying communication, ticketing, workflows, and business operations into a single product ecosystem across Web, Android, iOS, and PWA.",
+        contributions: [
+          "Lead product design for Zain Direct, serving an organization of 1,000+ employees across Web, Android, iOS, and PWA.",
+          "Designed the UX architecture for 5 distinct user personas with tailored permissions and workflows, covering 8 core modules including Ticketing, Chat, Threads, Actions, Logs, and Account Management.",
+          "Built and scaled a design system adopted across the platform's modules, cutting new-screen design turnaround by an estimated 25–30% and improving front-end consistency for the engineering team.",
+          "Ran UX audits and usability evaluations that informed iterative improvements to platform adoption among internal teams.",
+          "Designed sales pipeline experiences and customer-facing product presentations supporting new business demos.",
+          "Contributed to the ongoing redesign of Zain's main corporate website, starting with the B2B experience before transitioning scope to B2C-facing pages — using Midjourney for visual assets and Figma AI, Figma Make and Lovable to rapidly test layout and interaction concepts, cutting early-stage concept turnaround by an estimated 40–50%.",
+        ],
       },
       {
         dates: "Jan 2024 — Present",
@@ -152,45 +164,97 @@ export const site: SiteContent = {
         company: "TheLOCTech",
         location: "Saudi Arabia",
         employmentType: "Freelance",
+        workMode: "Remote",
+        industry: "Software house · 11–50 employees",
         logo: "/logos/loctech.avif",
         description:
-          "Own product design strategy across a portfolio of 5+ enterprise and platform products for clients in the GCC and Turkey, leading initiatives from discovery to production and mentoring designers. Embed AI tools (ChatGPT, Claude, Midjourney, Lovable) into research, moodboarding, and prototyping — and use Claude for AI-assisted front-end coding to turn concepts into functional prototypes faster.",
+          "Provide strategic product design leadership across enterprise and platform products for regional markets, driving initiatives from product discovery to production while establishing scalable design practices and mentoring design teams.",
+        contributions: [
+          "Lead product design strategy across a portfolio of 5+ enterprise and platform products for clients across the GCC and Turkey, balancing localization with a unified product vision.",
+          "Mentor a design team of 2–4 product designers through structured reviews, raising design QA pass rate on first handoff.",
+          "Established shared design systems and reusable component libraries reused across multiple client engagements, reducing design ramp-up time for new projects.",
+          "Embedded AI tools (ChatGPT, Claude, Midjourney, Lovable) into the design and prototyping process across client projects — for research synthesis, concept moodboards, and clickable AI-built prototypes — cutting time spent on research, exploration, and early prototyping by an estimated 50–60%.",
+          "Used Claude for AI-assisted front-end coding, turning design concepts into functional prototypes faster for client reviews.",
+        ],
       },
       {
         dates: "Sep 2022 — Nov 2024",
         role: "Senior Product Designer",
         company: "PaySky Inc.",
         location: "Egypt",
+        employmentType: "Full-time",
+        workMode: "Hybrid",
+        industry: "Fintech & financial services · 51–200 employees",
         logo: "/logos/paysky.avif",
         description:
-          "Designed fintech and payment solutions used across multiple countries, including the Government Collection System (GCS) for African markets. Led UI/UX for the Yalla Super App across Egypt, UAE, KSA, and Pakistan, delivering merchant and consumer experiences through user-centered design and cross-functional collaboration.",
+          "Led product design across a portfolio of fintech, government, and merchant platforms, shaping digital experiences that supported payment modernization, enterprise operations, and public digital transformation initiatives throughout Africa and the Middle East.",
+        contributions: [
+          "Led product design across a portfolio of 6+ fintech, government, and merchant platforms serving markets across Africa and the Middle East.",
+          "Designed the Government Collection System (GCS), a national-scale digital payment collection platform for government entities across African markets.",
+          "Designed the Yalla Super App experience across 4 markets (Egypt, UAE, KSA, and Pakistan), aligning a single product vision with local market needs.",
+          "Built a reusable design system adopted across the product portfolio, reducing design-to-development handoff time by an estimated 20–25%.",
+          "Conducted UX research and usability testing that directly shaped merchant dashboard and payment flow improvements.",
+        ],
       },
       {
         dates: "Feb 2022 — Feb 2023",
         role: "UI/UX Designer",
         company: "AMANAH TEKNOLOGIA",
         location: "Kuwait",
+        employmentType: "Part-time",
+        workMode: "Remote",
+        industry: "Software house · 51–200 employees",
         logo: "/logos/amanah.avif",
         description:
-          "Designed healthcare software with a strong focus on accessibility, inclusivity, and interoperability with existing EHR systems. Worked directly with doctors and technical teams to ensure real-world usability.",
+          "Designed digital products across healthcare, enterprise, and business domains, transforming complex operational requirements into intuitive user experiences while collaborating with multidisciplinary teams throughout the product development lifecycle.",
+        contributions: [
+          "Designed end-to-end product experiences across 3+ healthcare, enterprise, and business solutions, simplifying complex clinical and operational workflows into intuitive interfaces.",
+          "Delivered responsive web and mobile interfaces with accessibility as a core requirement, working directly with healthcare professionals to validate flows.",
+        ],
+      },
+      {
+        dates: "Jan 2022 — Jul 2022",
+        role: "UI/UX Designer",
+        company: "Fork N Knife",
+        location: "Turkey",
+        employmentType: "Part-time",
+        workMode: "Remote",
+        industry: "Food & beverage manufacturing · 11–50 employees",
+        description:
+          "Designed digital products for startups across the foodtech, cloud kitchen, health & nutrition, and consumer brands sectors, helping transform early-stage ideas into scalable digital experiences.",
+        contributions: [
+          "Designed a cloud kitchen management platform and customer-facing ordering journey, plus a nutrition and calorie-tracking mobile app, for an early-stage foodtech startup.",
+        ],
       },
       {
         dates: "Nov 2021 — Jun 2022",
         role: "UI/UX Designer",
-        company: "BL80 Production LLC",
+        company: "BL80 Production LLC.",
         location: "United States",
+        employmentType: "Freelance",
+        workMode: "Remote",
+        industry: "Production · 11–50 employees",
         logo: "/logos/bl80.avif",
         description:
-          "Led UI/UX for a crypto wallet and NFT marketplace, balancing usability with security constraints such as authentication and key management.",
+          "Designed digital products and brand experiences across fintech, blockchain, and business solutions.",
+        contributions: [
+          "Designed fintech products including Bitcoin, cryptocurrency, and digital wallet platforms, plus 5+ responsive websites for clients across industries.",
+        ],
       },
       {
         dates: "Mar 2017 — May 2021",
         role: "Web Designer",
         company: "Vnu Mngr",
         location: "United States",
+        employmentType: "Full-time",
+        workMode: "Remote",
+        industry: "Software house · 11–50 employees",
         logo: "/logos/vnumngr.avif",
         description:
-          "Leading the design of brand-driven management and CRM software for restaurants, bars, and nightlife venues, delivering cohesive brand identities, motion-enhanced interfaces, and user-centered tools for sales, marketing, and operations.",
+          "Started as a front-end developer before moving into UI/UX design, where I designed a SaaS platform for restaurants, bars, and nightlife businesses, covering operations, CRM, marketing, and customer engagement.",
+        contributions: [
+          "Designed a SaaS platform for restaurants, bars, and nightlife venues covering CRM, booking, staff management, and loyalty workflows, supporting white-label deployments across multiple client brands.",
+        ],
       },
     ],
   },
@@ -225,18 +289,18 @@ export const site: SiteContent = {
     label: "Tools & technologies",
     heading: "Tools I Work With",
     body: "From design to development, I work across the full product lifecycle.",
-    // AUTHORED — drawn from the tools named in AbdelRahman's brief.
     items: [
       { name: "Figma", abbr: "Fig" },
+      { name: "Sketch", abbr: "Sk" },
+      { name: "Adobe CC", abbr: "Ai" },
       { name: "Figma AI", abbr: "AI" },
       { name: "Figma Make", abbr: "Mk" },
+      { name: "Lovable", abbr: "Lv" },
       { name: "Midjourney", abbr: "MJ" },
       { name: "ChatGPT", abbr: "GPT" },
       { name: "Claude", abbr: "Cl" },
-      { name: "Lovable", abbr: "Lv" },
-      { name: "Webflow", abbr: "Wf" },
-      { name: "Next.js", abbr: "N" },
-      { name: "React", abbr: "Re" },
+      { name: "JavaScript", abbr: "JS" },
+      { name: "Flutter", abbr: "Fl" },
     ],
   },
 
@@ -248,6 +312,36 @@ export const site: SiteContent = {
   },
 
   cv: { href: "", label: "Download CV" },
+
+  about: {
+    label: "About",
+    heading: "Designing for complexity, end to end.",
+    summary:
+      "Senior Product Designer with 8+ years leading end-to-end design for enterprise and consumer digital products across telecom, fintech, government, healthcare, and SaaS. Track record of building scalable design systems, leading multi-persona enterprise platforms, and mentoring design teams across the GCC, Turkey, Africa, and the US. Comfortable owning a product from discovery through pixel-perfect delivery, and translating complex operational workflows into interfaces engineering teams can build without friction.",
+    skills: [
+      "User Experience (UX) Design",
+      "User Interface (UI) Design",
+      "Design Systems",
+      "Prototyping & Interaction Design",
+      "Information Architecture",
+      "Design Thinking & UX Strategy",
+      "Cross-functional Collaboration",
+      "Design Team Mentorship",
+      "AI-Assisted Product Design",
+      "Rapid Prototyping with AI Tools",
+      "AI-Assisted Development",
+    ],
+    education: {
+      qualification: "Bachelor's Degree in Languages & Translation",
+      institution: "October 6 University",
+      year: "2012",
+    },
+    languages: [
+      { name: "Arabic", level: "Native" },
+      { name: "English", level: "Advanced" },
+      { name: "Spanish", level: "Beginner" },
+    ],
+  },
 
   contact: {
     email: "nesta.samy@live.com",
