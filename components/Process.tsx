@@ -1,6 +1,6 @@
 import { site } from "@/content/site";
+import Image from "next/image";
 import { Button } from "./ui";
-import { ProcessVisual } from "./ProcessVisual";
 import { ArrowRightIcon, ProcessIcon } from "./icons";
 
 /**
@@ -37,8 +37,19 @@ export function Process() {
             </p>
           ) : null}
 
+          {/*
+            Decorative: an empty `alt` keeps it out of the accessibility tree,
+            because everything it says is said in the words beside it and in
+            the four steps below.
+          */}
           <div className="process-visual">
-            <ProcessVisual />
+            <Image
+              src={process.visual.src}
+              alt=""
+              width={process.visual.width}
+              height={process.visual.height}
+              className="process-visual-img"
+            />
           </div>
 
           {process.cta ? (

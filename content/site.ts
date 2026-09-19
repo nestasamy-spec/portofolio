@@ -157,22 +157,14 @@ export const site: SiteContent = {
       },
     ],
     /*
-     * The decorative dashboard. It is not a claim about a real product — it
-     * is the section's argument drawn rather than written: a complicated
-     * system, given a structure, arriving at something measurable.
+     * The render he supplied. It says what the words beside it say — a
+     * complicated system, given a structure, arriving at something
+     * measurable — and it is the reason the intro is only five columns wide.
      */
     visual: {
-      nav: ["Overview", "Flows", "Components", "Insights", "Settings"],
-      title: "Release readiness",
-      subtitle: "One view across the whole flow",
-      range: "This release",
-      tiles: [
-        { label: "Flows mapped", value: "128", delta: "+24" },
-        { label: "Open questions", value: "4", delta: "−11" },
-        { label: "Ready to ship", value: "92%", delta: "+6" },
-      ],
-      marker: "+24%",
-      months: ["Discovery", "Structure", "Prototype", "Build", "Ship"],
+      src: "/work/process-dashboard.webp",
+      width: 1536,
+      height: 1024,
     },
   },
 

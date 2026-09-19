@@ -96,22 +96,14 @@ export interface ProcessStep {
 }
 
 /**
- * Micro-copy for the dashboard beside the intro. The whole visual is
- * `aria-hidden` — none of this is read aloud or indexed — and it lives here
- * only so the composition can be retuned without opening the component.
+ * The render beside the intro. It is decorative — the words next to it carry
+ * the meaning — so it is published with an empty `alt` and stays out of the
+ * accessibility tree.
  */
 export interface ProcessVisual {
-  /** Sidebar rows, top to bottom. */
-  nav: string[];
-  title: string;
-  subtitle: string;
-  /** The range control at the head of the panel. */
-  range: string;
-  tiles: { label: string; value: string; delta?: string }[];
-  /** The pill on the chart's high point. */
-  marker: string;
-  /** Axis labels under the chart. */
-  months: string[];
+  src: string;
+  width: number;
+  height: number;
 }
 
 export interface SectionIntro {

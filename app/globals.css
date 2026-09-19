@@ -868,7 +868,29 @@
   }
 
   .process-visual {
+    display: flex;
+    justify-content: center;
     margin-top: 0.75rem;
+  }
+
+  .process-visual-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    /*
+     * The render carries its own cool backdrop, and the section's is a warm
+     * off-white, so left alone it would read as a rectangle pasted onto the
+     * page. Fading every edge dissolves the join: the composition keeps its
+     * light and the page keeps its surface.
+     */
+    mask-image:
+      linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent),
+      linear-gradient(180deg, transparent, #000 6%, #000 94%, transparent);
+    mask-composite: intersect;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent),
+      linear-gradient(180deg, transparent, #000 6%, #000 94%, transparent);
+    -webkit-mask-composite: source-in;
   }
 
   @media (min-width: 1024px) {
@@ -905,9 +927,26 @@
     .process-visual {
       grid-area: 1 / 6 / 5 / 13;
       align-self: center;
+      justify-content: flex-end;
       margin-top: 0;
-      /* it leans past the measure, which is where the depth comes from */
-      margin-inline-end: calc(-1 * clamp(0rem, 2vw, 2.75rem));
+      /*
+       * Once the page is wider than the measure, the render follows the
+       * screen rather than the text: it slides out into the margin so its
+       * right edge stays near the edge of the window. That is what keeps it
+       * a true 45% of the screen on a large monitor without it creeping
+       * under the headline, and it is where the depth comes from as well.
+       * Below 78rem there is no margin to move into and this is zero.
+       */
+      margin-inline-end: min(0px, calc((78rem - 100vw) / 2));
+    }
+
+    /*
+     * 45% of the screen, as asked. Below this breakpoint the layout is a
+     * single column and the render takes the full measure instead — 45% of a
+     * phone is not a picture, it is a stamp.
+     */
+    .process-visual-img {
+      width: 45vw;
     }
   }
 
@@ -1025,259 +1064,6 @@
       transform: none;
     }
   }
-
-  /* ---- the dashboard ---- */
-
-  /*
-   * One knob. Every measurement inside the composition is in `em`, so
-   * `--pv-unit` scales the whole thing — type, padding, radii and chart
-   * together — instead of each piece needing its own breakpoint.
-   */
-  .pv {
-    --pv-unit: clamp(0.5rem, 0.72vw, 0.8rem);
-    --pv-radius: 1.2em;
-    /* how far the sheets behind are allowed to lean past the panel */
-    --pv-bleed: 6%;
-    /* the turn, kept in properties so the float below can reuse it */
-    --pv-rx: 7deg;
-    --pv-ry: -14deg;
-    --pv-rz: -1.2deg;
-    font-size: var(--pv-unit);
-    perspective: 1600px;
-    perspective-origin: 62% 46%;
-  }
-
-  /*
-   * Narrow screens have no margin to lean into — the composition is already
-   * the full width of the page — so it straightens up and pulls its sheets
-   * in rather than being cut off square at the edge of the screen.
-   */
-  @media (max-width: 1023px) {
-    .pv {
-      --pv-bleed: 1.5%;
-      --pv-rx: 5deg;
-      --pv-ry: -9deg;
-      --pv-rz: -0.6deg;
-    }
-  }
-
-  .pv-deck {
-    position: relative;
-    transform-style: preserve-3d;
-    transform: rotateX(var(--pv-rx)) rotateY(var(--pv-ry)) rotateZ(var(--pv-rz));
-  }
-
-  /* The sheets are the depth: same glass, further back, peeking out. */
-  .pv-sheet {
-    position: absolute;
-    border-radius: var(--pv-radius);
-    border: 1px solid rgb(255 255 255 / 0.75);
-    background: linear-gradient(
-      150deg,
-      rgb(255 255 255 / 0.8),
-      rgb(255 255 255 / 0.35)
-    );
-    box-shadow: 0 30px 60px -48px rgb(17 17 17 / 0.5);
-  }
-
-  .pv-sheet-back {
-    inset: -13% 9% 20% -7%;
-    transform: translateZ(-96px);
-  }
-
-  .pv-sheet-mid {
-    inset: -7% calc(-1 * var(--pv-bleed)) 11% 5%;
-    transform: translateZ(-48px);
-  }
-
-  .pv-panel {
-    position: relative;
-    display: grid;
-    grid-template-columns: 11em minmax(0, 1fr);
-    overflow: hidden;
-    border-radius: var(--pv-radius);
-    border: 1px solid rgb(17 17 17 / 0.06);
-    background: var(--color-surface);
-    box-shadow:
-      0 2px 4px rgb(17 17 17 / 0.04),
-      0 44px 64px -44px rgb(17 17 17 / 0.45);
-  }
-
-  .pv-side {
-    padding: 1.4em 1em;
-    background: var(--color-surface-dark);
-    color: rgb(255 255 255 / 0.7);
-  }
-
-  .pv-mark {
-    display: block;
-    width: 2em;
-    height: 2em;
-    border-radius: 0.6em;
-    background: rgb(255 255 255 / 0.92);
-  }
-
-  .pv-nav {
-    margin-top: 1.9em;
-    display: grid;
-    gap: 0.3em;
-  }
-
-  .pv-nav li {
-    display: flex;
-    align-items: center;
-    gap: 0.7em;
-    padding: 0.55em 0.7em;
-    border-radius: 0.55em;
-    color: rgb(255 255 255 / 0.5);
-    white-space: nowrap;
-  }
-
-  .pv-nav li.is-current {
-    background: rgb(255 255 255 / 0.1);
-    color: rgb(255 255 255 / 0.95);
-  }
-
-  .pv-nav-dot {
-    width: 0.85em;
-    height: 0.85em;
-    border-radius: 0.25em;
-    border: 1px solid currentColor;
-    opacity: 0.65;
-  }
-
-  .pv-main {
-    display: grid;
-    align-content: start;
-    gap: 1.2em;
-    padding: 1.5em 1.6em 1.4em;
-  }
-
-  .pv-head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1em;
-  }
-
-  .pv-title {
-    font-size: 1.8em;
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    color: var(--color-ink);
-  }
-
-  .pv-sub {
-    margin-top: 0.5em;
-    color: var(--color-muted);
-  }
-
-  .pv-range {
-    padding: 0.5em 0.8em;
-    border: 1px solid var(--color-line);
-    border-radius: 0.6em;
-    color: var(--color-body);
-    white-space: nowrap;
-  }
-
-  .pv-tiles {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.8em;
-  }
-
-  .pv-tile {
-    display: grid;
-    gap: 0.25em;
-    padding: 0.85em 0.9em;
-    border: 1px solid var(--color-line);
-    border-radius: 0.8em;
-    background: var(--color-surface-alt);
-  }
-
-  .pv-tile-label {
-    color: var(--color-muted);
-    white-space: nowrap;
-  }
-
-  .pv-tile-value {
-    font-size: 1.7em;
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    color: var(--color-ink);
-  }
-
-  .pv-tile-delta {
-    color: var(--color-accent);
-  }
-
-  .pv-chart {
-    position: relative;
-    height: 7.5em;
-    color: var(--color-ink);
-  }
-
-  .pv-chart svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  /* 55% and 33% are where the line's high point sits in the viewBox. */
-  .pv-dot {
-    position: absolute;
-    left: 55%;
-    top: 33%;
-    width: 0.75em;
-    height: 0.75em;
-    border-radius: 50%;
-    background: var(--color-accent);
-    box-shadow: 0 0 0 0.22em var(--color-surface);
-    transform: translate(-50%, -50%);
-  }
-
-  .pv-marker {
-    position: absolute;
-    left: 55%;
-    top: 33%;
-    padding: 0.45em 0.7em;
-    border-radius: 0.55em;
-    background: var(--color-ink);
-    color: var(--color-surface);
-    white-space: nowrap;
-    transform: translate(-50%, -160%);
-  }
-
-  .pv-axis {
-    display: flex;
-    justify-content: space-between;
-    gap: 0.5em;
-    color: var(--color-muted);
-  }
-
-  .pv-axis li {
-    white-space: nowrap;
-  }
-
-  /* A long, shallow drift, so the stack never sits completely still. */
-  @media (prefers-reduced-motion: no-preference) {
-    .pv-deck {
-      animation: pv-float 16s ease-in-out infinite alternate;
-    }
-  }
-
-  @keyframes pv-float {
-    from {
-      transform: rotateX(var(--pv-rx)) rotateY(var(--pv-ry))
-        rotateZ(var(--pv-rz)) translate3d(0, -0.45rem, 0);
-    }
-    to {
-      transform: rotateX(var(--pv-rx)) rotateY(var(--pv-ry))
-        rotateZ(var(--pv-rz)) translate3d(0, 0.45rem, 0);
-    }
-  }
 }
 
 /*
@@ -1288,18 +1074,18 @@
  */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .pv {
-      animation: pv-parallax linear both;
+    .process-visual-img {
+      animation: process-parallax linear both;
       animation-timeline: view();
       animation-range: entry 0% exit 100%;
     }
 
-    @keyframes pv-parallax {
+    @keyframes process-parallax {
       from {
-        transform: translateY(1.75rem);
+        transform: translateY(1.5rem);
       }
       to {
-        transform: translateY(-1.75rem);
+        transform: translateY(-1.5rem);
       }
     }
   }
