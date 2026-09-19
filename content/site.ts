@@ -122,6 +122,8 @@ export const site: SiteContent = {
     },
   },
 
+  companies: { label: "Where I've worked" },
+
   process: {
     label: "01 — How I work",
     /*

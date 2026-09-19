@@ -167,6 +167,12 @@ export interface SiteContent {
   hero: Hero;
   badge: Badge;
   /**
+   * The moving strip between the badge and "How I work". The companies on it
+   * are read straight from `career`, so the two can never fall out of step;
+   * this is only the line above them.
+   */
+  companies: { label: string };
+  /**
    * "How I work", between the hero and the case studies. It answers how
    * rather than who, so nothing the hero already says — the years, the
    * industries, the title — belongs in it.
