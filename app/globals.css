@@ -582,10 +582,12 @@
       rgb(255 255 255 / 0.8)
     );
     /*
-     * Blur and a touch of saturation, and nothing else. The saturation only
-     * ever shows over the project images, since the rest of the page has no
-     * colour to lift; it keeps them from going grey under the glass without
-     * making them louder than they are on the page. A `contrast` and a
+     * Blur, and saturation taken below neutral rather than above it. The
+     * usual glass recipe lifts colour to make up for what the blur mixes
+     * away; this page is monochrome, so the only thing the setting ever
+     * touches is a project image passing underneath, and letting those fall
+     * towards grey under the bar suits the page better than making them
+     * louder than they are on it. A `contrast` and a
      * `brightness` sat here for a while too, put in to force what passes
      * behind out of legibility while the blur was silently doing nothing at
      * all; with the blur working they only turned the glass milky.
@@ -595,7 +597,7 @@
      * it made it drop the standard one instead of keeping both — which left
      * Firefox with a tinted bar and no blur at all. Let the build do it.
      */
-    backdrop-filter: blur(8px) saturate(120%);
+    backdrop-filter: blur(8px) saturate(80%);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.7),
       0 10px 30px -24px rgb(17 17 17 / 0.55);
