@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
+import { Process } from "@/components/Process";
 import { SelectedWork } from "@/components/SelectedWork";
 import { Expertise } from "@/components/Expertise";
 import { CareerJourney } from "@/components/CareerJourney";
@@ -17,6 +18,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
+        <Process />
         <SelectedWork />
         <Expertise />
         <CareerJourney />

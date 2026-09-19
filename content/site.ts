@@ -117,6 +117,65 @@ export const site: SiteContent = {
     },
   },
 
+  process: {
+    label: "01 — How I work",
+    heading: "I turn messy requirements into clear product decisions.",
+    body: "I bring business goals, user needs and technical constraints together to create experiences that are clear, practical and ready to ship.",
+    cta: { label: "See how I work", href: "#work" },
+    steps: [
+      {
+        number: "01",
+        name: "Understand",
+        title: "Start with the problem.",
+        description:
+          "Break down business goals, user needs and constraints before jumping into solutions.",
+        icon: "understand",
+      },
+      {
+        number: "02",
+        name: "Structure",
+        title: "Make complexity easier to navigate.",
+        description:
+          "Map flows, information and decisions into a product structure that makes sense.",
+        icon: "structure",
+      },
+      {
+        number: "03",
+        name: "Validate",
+        title: "Test the thinking, not just the pixels.",
+        description:
+          "Use prototypes, feedback and iteration to challenge assumptions and improve the experience.",
+        icon: "validate",
+      },
+      {
+        number: "04",
+        name: "Deliver",
+        title: "Turn decisions into real products.",
+        description:
+          "Work closely with engineering and stakeholders to make sure the final product holds up beyond the design file.",
+        icon: "deliver",
+      },
+    ],
+    /*
+     * The decorative dashboard. It is not a claim about a real product — it
+     * is the section's argument drawn rather than written: a complicated
+     * system, given a structure, arriving at something measurable.
+     */
+    visual: {
+      nav: ["Overview", "Flows", "Components", "Insights", "Settings"],
+      title: "Release readiness",
+      subtitle: "One view across the whole flow",
+      range: "This release",
+      tiles: [
+        { label: "Flows mapped", value: "128", delta: "+24" },
+        { label: "Open questions", value: "4", delta: "−11" },
+        { label: "Ready to ship", value: "92%", delta: "+6" },
+      ],
+      marker: "+24%",
+      months: ["Discovery", "Structure", "Prototype", "Build", "Ship"],
+    },
+  },
+
   work: {
     label: "Featured work",
     heading: "Selected Work",

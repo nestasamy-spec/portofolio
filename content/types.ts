@@ -83,6 +83,37 @@ export interface Language {
   level: string;
 }
 
+/** One step of the process, numbered in content so the sequence is editable. */
+export interface ProcessStep {
+  /** "01" … "04". */
+  number: string;
+  /** The step's one-word name, e.g. "Understand". Set in caps by the CSS. */
+  name: string;
+  title: string;
+  description: string;
+  /** Key into the process icon map in `components/icons.tsx`. */
+  icon: string;
+}
+
+/**
+ * Micro-copy for the dashboard beside the intro. The whole visual is
+ * `aria-hidden` — none of this is read aloud or indexed — and it lives here
+ * only so the composition can be retuned without opening the component.
+ */
+export interface ProcessVisual {
+  /** Sidebar rows, top to bottom. */
+  nav: string[];
+  title: string;
+  subtitle: string;
+  /** The range control at the head of the panel. */
+  range: string;
+  tiles: { label: string; value: string; delta?: string }[];
+  /** The pill on the chart's high point. */
+  marker: string;
+  /** Axis labels under the chart. */
+  months: string[];
+}
+
 export interface SectionIntro {
   label: string;
   heading: string;
@@ -136,6 +167,12 @@ export interface SiteContent {
   navCta: NavLink;
   hero: Hero;
   badge: Badge;
+  /**
+   * "How I work", between the hero and the case studies. It answers how
+   * rather than who, so nothing the hero already says — the years, the
+   * industries, the title — belongs in it.
+   */
+  process: SectionIntro & { steps: ProcessStep[]; visual: ProcessVisual };
   work: SectionIntro & { items: WorkItem[] };
   expertise: SectionIntro & { items: ExpertiseItem[] };
   career: SectionIntro & { entries: CareerEntry[] };

@@ -28,6 +28,16 @@
   --text-label--line-height: 1;
   --text-label--letter-spacing: 0.14em;
 
+  /*
+   * The one colour in an otherwise monochrome system, and it is rationed: a
+   * chart line in the section visual, a delta, and the wash inside a process
+   * icon. Nothing structural is ever drawn in it, so the page still reads as
+   * black and white with something alive in it.
+   */
+  --color-accent: #5b5ee0;
+  --color-accent-ink: #4a4dbb;
+  --color-accent-soft: #eef0fc;
+
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -782,6 +792,515 @@
   @media (prefers-reduced-motion: reduce) {
     .nav-bar {
       animation: none;
+    }
+  }
+}
+
+/*
+ * "How I work" — the section between the hero and the case studies, and the
+ * dashboard drawn beside it.
+ */
+@layer components {
+  .process {
+    position: relative;
+    /*
+     * `clip` rather than `hidden` on purpose. The visual leans past the right
+     * edge of the measure and has to be cut off there, but `overflow: hidden`
+     * would make this section a scroll container, and the visual's parallax
+     * is driven by a `view()` timeline that then resolves against this
+     * section — which never scrolls — instead of the page. `clip` cuts
+     * without creating the scroller. The vertical axis stays visible so the
+     * cards' shadows are not sliced.
+     */
+    overflow-x: clip;
+    overflow-y: visible;
+    background: var(--color-surface-alt);
+    padding-block: 4.5rem 5rem;
+  }
+
+  /* The hero ends in white, so this warms into its own surface rather than
+     meeting it at a seam. */
+  .process::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 14rem;
+    background: linear-gradient(
+      180deg,
+      var(--color-surface),
+      rgb(255 255 255 / 0)
+    );
+    pointer-events: none;
+  }
+
+  .process > .shell {
+    position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .process {
+      padding-block: 6.5rem 7rem;
+    }
+  }
+
+  .process-intro {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .process-headline {
+    max-width: 18ch;
+    font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.028em;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  .process-body {
+    max-width: 46ch;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-body);
+    text-wrap: pretty;
+  }
+
+  .process-visual {
+    margin-top: 0.75rem;
+  }
+
+  @media (min-width: 1024px) {
+    /*
+     * Twelve columns, five of them for the argument and seven for the
+     * picture of it. Each part is placed by name, so the visual can sit
+     * between the paragraph and the call to action in the source — which is
+     * the order a phone wants — without the wide layout inheriting it.
+     */
+    .process-intro {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 2rem;
+      row-gap: 1.25rem;
+      align-items: start;
+    }
+
+    .process-eyebrow {
+      grid-area: 1 / 1 / 2 / 6;
+    }
+
+    .process-headline {
+      grid-area: 2 / 1 / 3 / 6;
+    }
+
+    .process-body {
+      grid-area: 3 / 1 / 4 / 6;
+    }
+
+    .process-cta {
+      grid-area: 4 / 1 / 5 / 6;
+      margin-top: 1rem;
+    }
+
+    .process-visual {
+      grid-area: 1 / 6 / 5 / 13;
+      align-self: center;
+      margin-top: 0;
+      /* it leans past the measure, which is where the depth comes from */
+      margin-inline-end: calc(-1 * clamp(0rem, 2vw, 2.75rem));
+    }
+  }
+
+  .process-steps {
+    margin-top: 3.5rem;
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .process-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .process-steps {
+      margin-top: 5rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+  }
+
+  /*
+   * Four steps, not four services: the same surface, the same weight, read
+   * left to right. So the styling is nearly nothing — a hairline, a breath of
+   * white, and a shadow that only shows when the card is lifted.
+   */
+  .process-step {
+    position: relative;
+    height: 100%;
+    padding: 1.5rem 1.375rem 1.625rem;
+    border: 1px solid rgb(17 17 17 / 0.07);
+    border-radius: 1rem;
+    background: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.92),
+      rgb(255 255 255 / 0.62)
+    );
+    box-shadow:
+      0 1px 2px rgb(17 17 17 / 0.03),
+      0 22px 34px -30px rgb(17 17 17 / 0.45);
+    transition:
+      transform 0.45s var(--ease-out-soft),
+      box-shadow 0.45s var(--ease-out-soft),
+      border-color 0.45s var(--ease-out-soft);
+  }
+
+  .process-step:hover {
+    transform: translateY(-4px);
+    border-color: rgb(17 17 17 / 0.12);
+    box-shadow:
+      0 1px 2px rgb(17 17 17 / 0.04),
+      0 30px 44px -30px rgb(17 17 17 / 0.5);
+  }
+
+  /* Large enough to number the sequence at a glance, pale enough to stay
+     behind the words. */
+  .process-step-number {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.25rem;
+    font-size: 2.25rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: rgb(17 17 17 / 0.07);
+  }
+
+  .process-step-icon {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.7rem;
+    border: 1px solid rgb(91 94 224 / 0.14);
+    background: var(--color-accent-soft);
+    color: var(--color-accent-ink);
+  }
+
+  .process-step-name {
+    margin-top: 1.25rem;
+    font-size: var(--text-label);
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--color-muted);
+  }
+
+  .process-step-title {
+    margin-top: 0.65rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    line-height: 1.3;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  .process-step-body {
+    margin-top: 0.55rem;
+    font-size: 0.8125rem;
+    line-height: 1.65;
+    color: var(--color-body);
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process-step {
+      transition: none;
+    }
+
+    .process-step:hover {
+      transform: none;
+    }
+  }
+
+  /* ---- the dashboard ---- */
+
+  /*
+   * One knob. Every measurement inside the composition is in `em`, so
+   * `--pv-unit` scales the whole thing — type, padding, radii and chart
+   * together — instead of each piece needing its own breakpoint.
+   */
+  .pv {
+    --pv-unit: clamp(0.5rem, 0.72vw, 0.8rem);
+    --pv-radius: 1.2em;
+    /* how far the sheets behind are allowed to lean past the panel */
+    --pv-bleed: 6%;
+    /* the turn, kept in properties so the float below can reuse it */
+    --pv-rx: 7deg;
+    --pv-ry: -14deg;
+    --pv-rz: -1.2deg;
+    font-size: var(--pv-unit);
+    perspective: 1600px;
+    perspective-origin: 62% 46%;
+  }
+
+  /*
+   * Narrow screens have no margin to lean into — the composition is already
+   * the full width of the page — so it straightens up and pulls its sheets
+   * in rather than being cut off square at the edge of the screen.
+   */
+  @media (max-width: 1023px) {
+    .pv {
+      --pv-bleed: 1.5%;
+      --pv-rx: 5deg;
+      --pv-ry: -9deg;
+      --pv-rz: -0.6deg;
+    }
+  }
+
+  .pv-deck {
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--pv-rx)) rotateY(var(--pv-ry)) rotateZ(var(--pv-rz));
+  }
+
+  /* The sheets are the depth: same glass, further back, peeking out. */
+  .pv-sheet {
+    position: absolute;
+    border-radius: var(--pv-radius);
+    border: 1px solid rgb(255 255 255 / 0.75);
+    background: linear-gradient(
+      150deg,
+      rgb(255 255 255 / 0.8),
+      rgb(255 255 255 / 0.35)
+    );
+    box-shadow: 0 30px 60px -48px rgb(17 17 17 / 0.5);
+  }
+
+  .pv-sheet-back {
+    inset: -13% 9% 20% -7%;
+    transform: translateZ(-96px);
+  }
+
+  .pv-sheet-mid {
+    inset: -7% calc(-1 * var(--pv-bleed)) 11% 5%;
+    transform: translateZ(-48px);
+  }
+
+  .pv-panel {
+    position: relative;
+    display: grid;
+    grid-template-columns: 11em minmax(0, 1fr);
+    overflow: hidden;
+    border-radius: var(--pv-radius);
+    border: 1px solid rgb(17 17 17 / 0.06);
+    background: var(--color-surface);
+    box-shadow:
+      0 2px 4px rgb(17 17 17 / 0.04),
+      0 44px 64px -44px rgb(17 17 17 / 0.45);
+  }
+
+  .pv-side {
+    padding: 1.4em 1em;
+    background: var(--color-surface-dark);
+    color: rgb(255 255 255 / 0.7);
+  }
+
+  .pv-mark {
+    display: block;
+    width: 2em;
+    height: 2em;
+    border-radius: 0.6em;
+    background: rgb(255 255 255 / 0.92);
+  }
+
+  .pv-nav {
+    margin-top: 1.9em;
+    display: grid;
+    gap: 0.3em;
+  }
+
+  .pv-nav li {
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+    padding: 0.55em 0.7em;
+    border-radius: 0.55em;
+    color: rgb(255 255 255 / 0.5);
+    white-space: nowrap;
+  }
+
+  .pv-nav li.is-current {
+    background: rgb(255 255 255 / 0.1);
+    color: rgb(255 255 255 / 0.95);
+  }
+
+  .pv-nav-dot {
+    width: 0.85em;
+    height: 0.85em;
+    border-radius: 0.25em;
+    border: 1px solid currentColor;
+    opacity: 0.65;
+  }
+
+  .pv-main {
+    display: grid;
+    align-content: start;
+    gap: 1.2em;
+    padding: 1.5em 1.6em 1.4em;
+  }
+
+  .pv-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .pv-title {
+    font-size: 1.8em;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  .pv-sub {
+    margin-top: 0.5em;
+    color: var(--color-muted);
+  }
+
+  .pv-range {
+    padding: 0.5em 0.8em;
+    border: 1px solid var(--color-line);
+    border-radius: 0.6em;
+    color: var(--color-body);
+    white-space: nowrap;
+  }
+
+  .pv-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8em;
+  }
+
+  .pv-tile {
+    display: grid;
+    gap: 0.25em;
+    padding: 0.85em 0.9em;
+    border: 1px solid var(--color-line);
+    border-radius: 0.8em;
+    background: var(--color-surface-alt);
+  }
+
+  .pv-tile-label {
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+
+  .pv-tile-value {
+    font-size: 1.7em;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  .pv-tile-delta {
+    color: var(--color-accent);
+  }
+
+  .pv-chart {
+    position: relative;
+    height: 7.5em;
+    color: var(--color-ink);
+  }
+
+  .pv-chart svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 55% and 33% are where the line's high point sits in the viewBox. */
+  .pv-dot {
+    position: absolute;
+    left: 55%;
+    top: 33%;
+    width: 0.75em;
+    height: 0.75em;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 0.22em var(--color-surface);
+    transform: translate(-50%, -50%);
+  }
+
+  .pv-marker {
+    position: absolute;
+    left: 55%;
+    top: 33%;
+    padding: 0.45em 0.7em;
+    border-radius: 0.55em;
+    background: var(--color-ink);
+    color: var(--color-surface);
+    white-space: nowrap;
+    transform: translate(-50%, -160%);
+  }
+
+  .pv-axis {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5em;
+    color: var(--color-muted);
+  }
+
+  .pv-axis li {
+    white-space: nowrap;
+  }
+
+  /* A long, shallow drift, so the stack never sits completely still. */
+  @media (prefers-reduced-motion: no-preference) {
+    .pv-deck {
+      animation: pv-float 16s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes pv-float {
+    from {
+      transform: rotateX(var(--pv-rx)) rotateY(var(--pv-ry))
+        rotateZ(var(--pv-rz)) translate3d(0, -0.45rem, 0);
+    }
+    to {
+      transform: rotateX(var(--pv-rx)) rotateY(var(--pv-ry))
+        rotateZ(var(--pv-rz)) translate3d(0, 0.45rem, 0);
+    }
+  }
+}
+
+/*
+ * The parallax. It is a view timeline rather than a scroll listener, so it
+ * costs no JavaScript and cannot run on the main thread: the composition
+ * rises a little as the section crosses the screen, which is enough to
+ * separate it from the words beside it without drawing the eye off them.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .pv {
+      animation: pv-parallax linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+
+    @keyframes pv-parallax {
+      from {
+        transform: translateY(1.75rem);
+      }
+      to {
+        transform: translateY(-1.75rem);
+      }
     }
   }
 }

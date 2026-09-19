@@ -141,3 +141,48 @@ export function ExpertiseIcon({
   const Cmp = expertiseIcons[name as ExpertiseIconName] ?? expertiseIcons.spark;
   return <Cmp {...props} />;
 }
+
+/* ---- Process icons, keyed by `ProcessStep.icon` ---- */
+
+const processIcons = {
+  /** A lens over the problem, before anything is drawn. */
+  understand: (props: IconProps) => (
+    <Icon {...props}>
+      <circle cx="10.5" cy="10.5" r="6.5" />
+      <path d="m15.4 15.4 4.1 4.1" />
+      <path d="M7.8 9.4h5.4M7.8 12.4h3.2" />
+    </Icon>
+  ),
+  /** Many things resolved into one order. */
+  structure: (props: IconProps) => (
+    <Icon {...props}>
+      <rect x="8.5" y="3" width="7" height="5" rx="1.4" />
+      <rect x="3" y="16" width="6" height="5" rx="1.4" />
+      <rect x="15" y="16" width="6" height="5" rx="1.4" />
+      <path d="M12 8v4M6 16v-2.5h12V16" />
+    </Icon>
+  ),
+  /** The loop: try it, learn from it, change it. */
+  validate: (props: IconProps) => (
+    <Icon {...props}>
+      <path d="M20 12a8 8 0 1 1-2.6-5.9" />
+      <path d="M20.5 4.5V9h-4.5" />
+      <path d="m9 12 2.2 2.2L15.5 10" />
+    </Icon>
+  ),
+  /** Out of the design file and into the build. */
+  deliver: (props: IconProps) => (
+    <Icon {...props}>
+      <path d="M4 14v4.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V14" />
+      <path d="M12 3.5v10" />
+      <path d="m8.2 7.3 3.8-3.8 3.8 3.8" />
+    </Icon>
+  ),
+} as const;
+
+export type ProcessIconName = keyof typeof processIcons;
+
+export function ProcessIcon({ name, ...props }: IconProps & { name: string }) {
+  const Cmp = processIcons[name as ProcessIconName] ?? processIcons.understand;
+  return <Cmp {...props} />;
+}
