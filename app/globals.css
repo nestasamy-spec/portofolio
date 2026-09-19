@@ -590,8 +590,8 @@
      * flat tone instead of two, and `brightness` lifts what is left towards
      * the glass's own white before the gradient above covers it.
      */
-    backdrop-filter: blur(48px) saturate(180%) contrast(0.55) brightness(1.15);
-    -webkit-backdrop-filter: blur(48px) saturate(180%) contrast(0.55)
+    backdrop-filter: blur(70px) saturate(180%) contrast(0.55) brightness(1.15);
+    -webkit-backdrop-filter: blur(70px) saturate(180%) contrast(0.55)
       brightness(1.15);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.7),
