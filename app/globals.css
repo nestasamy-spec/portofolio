@@ -34,8 +34,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* clears the floating nav pill when jumping to an anchor */
-    scroll-padding-top: 5.5rem;
+    /* clears the nav bar when jumping to an anchor */
+    scroll-padding-top: 4.75rem;
   }
 
   body {
@@ -543,53 +543,52 @@
 }
 
 /*
- * Floating navigation pill.
+ * The navigation bar.
  *
  * Hidden while the reader is at the top of the page and revealed as they
  * scroll, driven by a CSS scroll timeline so no scroll listener — and so no
  * client component — is involved. The `@supports` guard matters: without it a
  * browser that ignores `animation-timeline` would run the keyframes on the
- * document timeline and the pill would fly in once and never respond again.
+ * document timeline and the bar would fly in once and never respond again.
  */
 @layer components {
   .site-header {
     position: fixed;
-    top: 0.85rem;
+    top: 0;
     left: 0;
     right: 0;
     z-index: 50;
-    display: flex;
-    justify-content: center;
-    padding-inline: 1rem;
     pointer-events: none;
   }
 
-  .nav-pill {
+  .nav-bar {
     pointer-events: auto;
-    display: flex;
-    max-width: 100%;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 999px;
-    border: 1px solid rgb(17 17 17 / 0.07);
+    border-bottom: 1px solid rgb(17 17 17 / 0.07);
     /*
-     * Nearly opaque, because the pill now arrives while the badge is still on
-     * screen and spends its first moments straddling it. At 0.82 the stretch
-     * over the card went grey and the pill read as two pieces.
+     * Opaque, not frosted. The bar arrives while the badge is still on screen
+     * and spends its first moments straddling it, and later passes the dark
+     * philosophy panel; any translucency turned the stretch in front of those
+     * grey, so the bar read as a seam across itself rather than one surface.
      */
-    background: rgb(255 255 255 / 0.94);
-    padding: 0.3rem 0.35rem;
-    backdrop-filter: blur(14px) saturate(160%);
-    box-shadow:
-      0 1px 2px rgb(17 17 17 / 0.04),
-      0 14px 34px -18px rgb(17 17 17 / 0.4);
+    background: var(--color-surface);
+    /* a hairline's worth of lift, not a floating object's shadow */
+    box-shadow: 0 10px 26px -24px rgb(17 17 17 / 0.5);
+  }
+
+  /* `.shell` supplies the gutter, so the brand lines up with the page */
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-block: 0.5rem;
   }
 
   .nav-brand {
     display: none;
+    flex: none;
     align-items: center;
     gap: 0.55rem;
-    padding-left: 0.3rem;
   }
 
   .nav-mark {
@@ -607,7 +606,7 @@
   }
 
   .nav-brand-name {
-    /* one line: the pill is too shallow to wrap a name without crowding */
+    /* one line: the bar is too shallow to wrap a name without crowding */
     white-space: nowrap;
     font-size: 0.8125rem;
     font-weight: 600;
@@ -617,6 +616,9 @@
   .nav-links {
     display: flex;
     align-items: center;
+    /* centred between the brand and the call to action, and centred alone
+       at the widths where neither of those is shown */
+    margin-inline: auto;
     gap: 0.1rem;
     /* at narrow widths the links scroll rather than fold into a menu */
     overflow-x: auto;
@@ -630,7 +632,7 @@
 
   /*
    * Only below the breakpoint where the brand and the call to action appear,
-   * because that is the width at which the links outrun the pill. The fade
+   * because that is the width at which the links outrun the bar. The fade
    * says there is more to the right; above it the links fit and a fade would
    * just dim the last one for nothing.
    */
@@ -688,9 +690,8 @@
       display: inline-flex;
     }
 
-    .nav-pill {
-      gap: 0.75rem;
-      padding-right: 0.3rem;
+    .nav-inner {
+      gap: 1rem;
     }
   }
 }
