@@ -1,0 +1,1279 @@
+@import "tailwindcss";
+
+/*
+ * Monochrome editorial system taken from the reference design: near-black ink,
+ * warm-neutral surfaces, a single hairline border colour, and colour supplied
+ * only by project imagery.
+ */
+@theme {
+  --color-ink: #111111;
+  --color-ink-soft: #1c1c1c;
+  --color-body: #5c5c5c;
+  --color-muted: #8c8c8c;
+  --color-line: #e6e5e3;
+  --color-line-dark: #2a2a2a;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f6f6f4;
+  --color-surface-dark: #111111;
+
+  --text-display: 4rem;
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.032em;
+
+  --text-h2: 2.25rem;
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.022em;
+
+  --text-label: 0.6875rem;
+  --text-label--line-height: 1;
+  --text-label--letter-spacing: 0.14em;
+
+  /*
+   * The one colour in an otherwise monochrome system, and it is rationed: a
+   * chart line in the section visual, a delta, and the wash inside a process
+   * icon. Nothing structural is ever drawn in it, so the page still reads as
+   * black and white with something alive in it.
+   */
+  --color-accent: #5b5ee0;
+  --color-accent-ink: #4a4dbb;
+  --color-accent-soft: #eef0fc;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* clears the nav bar when jumping to an anchor */
+    scroll-padding-top: 4.75rem;
+  }
+
+  body {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* Page gutter + max width, shared by every section. */
+  .shell {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Small uppercase section label above each heading. */
+  .eyebrow {
+    font-size: var(--text-label);
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    font-weight: 500;
+  }
+}
+
+/*
+ * Scroll-reveal.
+ *
+ * The hidden state is scoped to `.reveal-ready`, which an inline script in the
+ * document head adds before first paint and removes again after 2s unless
+ * `ScrollReveal` has mounted and claimed it. So the content is only ever
+ * hidden while something is there to reveal it: with JS off the class is never
+ * added, and if React fails to mount the class is dropped again. Either way
+ * every section ends up plainly visible rather than stranded at opacity 0.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s var(--ease-out-soft),
+      transform 0.7s var(--ease-out-soft);
+  }
+
+  .reveal-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Printing (and any full-page capture) must never inherit the hidden state. */
+@media print {
+  .reveal-ready [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/*
+ * The badge's geometry lives here rather than on the badge, because the nav
+ * pill keys its reveal to where the card ends and has to be able to read it.
+ */
+:root {
+  /* the strap runs to the top of the section, where it is cut off */
+  --badge-strap: 5.25rem;
+  --badge-width: clamp(16rem, 78vw, 22rem);
+  /* the card's width over its height, as `aspect-ratio` below states it */
+  --badge-ratio: 0.7;
+  /* the clip's height and the card's overlap of it */
+  --badge-clip-gap: 0.65rem;
+  /*
+   * How far the strap is built above the cut. The swing tilts it, so a strap
+   * that merely reached the cut would meet it at an angle and leave a wedge of
+   * background in one corner — the corner that rises. This is several times
+   * the deepest that wedge gets, so only solid ribbon ever crosses the line.
+   */
+  --badge-overshoot: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --badge-strap: 8.75rem;
+  }
+}
+
+/*
+ * The hero's hanging ID badge.
+ *
+ * Three nested transforms that must not fight each other: `.badge-swing`
+ * carries the pendulum and the perspective for its children, `.badge-card`
+ * carries the flip, and each face carries its own backface. Perspective sits
+ * on the swing rather than the stage because it only reaches direct children.
+ */
+@layer components {
+  .badge-stage {
+    display: flex;
+    justify-content: center;
+    /* hangs the overshoot above the section, which clips it */
+    margin-top: calc(-1 * var(--badge-overshoot));
+  }
+
+  .badge-swing {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* hangs from the top of the strap, not the middle of the card */
+    transform-origin: 50% 0;
+    /*
+     * Short enough that the card's near edge stays wide while it turns, so the
+     * flip reads as a solid object swinging past the reader rather than a
+     * flat plane that thins to nothing.
+     */
+    perspective: 900px;
+    perspective-origin: 50% 40%;
+    will-change: transform;
+  }
+
+  .badge-strap {
+    display: block;
+    width: 1.9rem;
+    /* `--badge-strap` is the length that shows; the overshoot is cut away */
+    height: calc(var(--badge-strap) + var(--badge-overshoot));
+    overflow: hidden;
+    background: var(--color-ink);
+    color: #fff;
+    /* reads top-to-bottom, letters turned onto their side */
+    writing-mode: vertical-rl;
+    /* without this the ribbon breaks the text into columns instead of one run */
+    white-space: nowrap;
+    text-align: center;
+    font-size: 0.5625rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    line-height: 1.9rem;
+  }
+
+  .badge-strap-text {
+    opacity: 0.75;
+  }
+
+  /* the metal bar the strap threads through */
+  .badge-clip {
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin-top: -1px;
+    height: 1rem;
+    width: 2.6rem;
+    border-radius: 0.22rem;
+    background: linear-gradient(180deg, #f4f4f2, #c9c9c5 55%, #e8e8e5);
+    box-shadow: 0 1px 2px rgb(17 17 17 / 0.35);
+  }
+
+  .badge-clip::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 0.45rem;
+    width: 0.45rem;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    background: var(--color-surface-alt);
+    box-shadow: inset 0 1px 1px rgb(17 17 17 / 0.4);
+  }
+
+  /*
+   * The flip control. Visually hidden but still focusable, and placed before
+   * the card so `~` can reach it.
+   */
+  .badge-toggle {
+    position: absolute;
+    height: 1px;
+    width: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .badge-card {
+    position: relative;
+    margin-top: -0.35rem;
+    width: var(--badge-width);
+    aspect-ratio: 7 / 10;
+    transform-style: preserve-3d;
+    /*
+     * Symmetric easing, deliberately. An ease-out curve is all but finished by
+     * the halfway point in time, which puts the card's edge-on moment far from
+     * the middle of the turn and out of step with the `visibility` swap below —
+     * the card then blanks for a beat instead of turning through.
+     */
+    transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .badge-toggle:checked ~ .badge-card {
+    transform: rotateY(180deg);
+  }
+
+  /* the checkbox takes the focus, so the card has to show it */
+  .badge-toggle:focus-visible ~ .badge-card {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 6px;
+    border-radius: 1.5rem;
+  }
+
+  .badge-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1.75rem 1.75rem;
+    border-radius: 1.5rem;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background-color: #151515;
+    background-image:
+      linear-gradient(158deg, rgb(255 255 255 / 0.07), transparent 42%),
+      radial-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px);
+    background-size:
+      auto,
+      12px 12px;
+    box-shadow:
+      0 30px 60px -24px rgb(17 17 17 / 0.5),
+      inset 0 0 0 1px rgb(255 255 255 / 0.06);
+    /*
+     * `backface-visibility` hides the face turned away, but only visually — its
+     * links would still be tabbable. Switching `visibility` does that too, and
+     * the delay is exactly half the turn — which, with the symmetric easing
+     * above, is the instant the card is edge-on — so neither face disappears
+     * while it is still facing the reader.
+     */
+    transition: visibility 0s linear 0.425s;
+  }
+
+  .badge-back {
+    transform: rotateY(180deg);
+  }
+
+  .badge-toggle:not(:checked) ~ .badge-card .badge-back,
+  .badge-toggle:checked ~ .badge-card .badge-front {
+    visibility: hidden;
+  }
+
+  /*
+   * Covers the whole face so a click anywhere flips it. The contact links sit
+   * above it, so they keep their own clicks.
+   */
+  .badge-hit {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    cursor: pointer;
+  }
+
+  .badge-name {
+    margin-top: 1.5rem;
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-align: center;
+  }
+
+  .badge-role {
+    margin-top: 0.35rem;
+    font-size: 0.8125rem;
+    color: rgb(255 255 255 / 0.62);
+    text-align: center;
+  }
+
+  .badge-tagline {
+    /* pairs with the portrait's auto margin to centre the block over the band */
+    margin-bottom: auto;
+    margin-top: 0.9rem;
+    max-width: 15rem;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: rgb(255 255 255 / 0.42);
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .badge-portrait {
+    position: relative;
+    display: grid;
+    place-items: center;
+    margin-top: auto;
+    height: 10.25rem;
+    width: 10.25rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #202020;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.08),
+      0 12px 30px -12px rgb(0 0 0 / 0.8);
+  }
+
+  /*
+   * The photo was taken in a lit room, so its corners carry a wall, a monitor
+   * and a plant that have nothing to do with the card. This sinks the edge of
+   * the circle into the card's own black, which leaves the face lit and stops
+   * the portrait reading as a cut-out dropped on top.
+   */
+  .badge-portrait::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle at 50% 42%,
+      transparent 38%,
+      rgb(21 21 21 / 0.4) 68%,
+      rgb(21 21 21 / 0.82) 100%
+    );
+  }
+
+  .badge-portrait img {
+    /* the rest of the site is monochrome; this pulls the photo towards it */
+    filter: saturate(0.82) contrast(1.04);
+  }
+
+  .badge-initials {
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: rgb(255 255 255 / 0.32);
+  }
+
+  .badge-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding-top: 1rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.42);
+    text-align: center;
+  }
+
+  /* the slack is already shared out above, on both faces */
+  .badge-foot {
+    margin-top: 0;
+  }
+
+  /* the band a real pass carries across its foot */
+  .badge-front .badge-foot {
+    width: 100%;
+    border-top: 1px solid rgb(255 255 255 / 0.08);
+  }
+
+  .badge-back-icon {
+    display: grid;
+    place-items: center;
+    height: 3.25rem;
+    width: 3.25rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.07);
+    color: rgb(255 255 255 / 0.75);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  }
+
+  .badge-back-heading {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.62);
+  }
+
+  .badge-rule {
+    display: block;
+    margin-top: 1rem;
+    height: 1px;
+    width: 66%;
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  .badge-rows {
+    position: relative;
+    /* above `.badge-hit`, so a link click opens the link instead of flipping */
+    z-index: 3;
+    /*
+     * ...but only the links themselves. The list spans the middle of the card,
+     * so without this it would swallow every click aimed at the gaps between
+     * rows and the card could not be turned back over.
+     */
+    pointer-events: none;
+    margin-block: auto;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 1.05rem;
+  }
+
+  .badge-row {
+    pointer-events: auto;
+    display: flex;
+    /* the hero centres its text; a label over its value has to read left */
+    text-align: start;
+    align-items: center;
+    gap: 0.85rem;
+    border-radius: 0.7rem;
+    padding: 0.3rem;
+    transition: background-color 0.2s var(--ease-out-soft);
+  }
+
+  .badge-row:hover {
+    background: rgb(255 255 255 / 0.05);
+  }
+
+  .badge-row-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    height: 2.1rem;
+    width: 2.1rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.08);
+    color: rgb(255 255 255 / 0.7);
+  }
+
+  .badge-row-label {
+    display: block;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.42);
+  }
+
+  .badge-row-value {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    color: rgb(255 255 255 / 0.88);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .badge-swing {
+    animation: badge-swing 6s var(--ease-in-out-swing, ease-in-out) infinite
+      alternate;
+    /* starts part-way through so the badge is already mid-swing on load */
+    animation-delay: -2.4s;
+  }
+
+  /*
+   * Hovering does not stop it: the swing is the point of the thing, and a
+   * pointer can follow a moving target. Keyboard focus does stop it, because
+   * a target reached by tab is hit with a key rather than aimed at, and a
+   * moving outline is hard to read.
+   */
+  .badge-swing:has(.badge-toggle:focus-visible) {
+    animation-play-state: paused;
+  }
+
+  @keyframes badge-swing {
+    from {
+      transform: rotate(-3.2deg);
+    }
+    to {
+      transform: rotate(3.2deg);
+    }
+  }
+}
+
+/* No swing, and the flip lands immediately rather than turning through 3D. */
+@media (prefers-reduced-motion: reduce) {
+  .badge-card,
+  .badge-face {
+    transition: none;
+  }
+}
+
+/*
+ * The navigation bar.
+ *
+ * Hidden while the reader is at the top of the page and revealed as they
+ * scroll, driven by a CSS scroll timeline so no scroll listener — and so no
+ * client component — is involved. The `@supports` guard matters: without it a
+ * browser that ignores `animation-timeline` would run the keyframes on the
+ * document timeline and the bar would fly in once and never respond again.
+ */
+@layer components {
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    pointer-events: none;
+  }
+
+  .nav-bar {
+    pointer-events: auto;
+    border-bottom: 1px solid rgb(17 17 17 / 0.06);
+    /*
+     * Glass. The gradient is what makes it read as glass rather than as a
+     * washed-out white: it catches the light at the top and falls away, and
+     * the inset highlight below draws the lit edge. The blur is deep enough
+     * that what passes behind reads as shape and tone rather than as text
+     * competing with the links in front of it.
+     *
+     * The alpha does not go lower than this on purpose. The bar arrives over
+     * the black badge and later crosses the dark philosophy panel, and body
+     * text is `--color-body` on whatever the glass settles to: at 0.80 over
+     * black that is #d1d1d1, which holds 4.6:1 and clears AA. Thinner glass
+     * looks better for a moment and then cannot be read for the rest of it.
+     */
+    background: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.86),
+      rgb(255 255 255 / 0.8)
+    );
+    /*
+     * Blur, and saturation taken below neutral rather than above it. The
+     * usual glass recipe lifts colour to make up for what the blur mixes
+     * away; this page is monochrome, so the only thing the setting ever
+     * touches is a project image passing underneath, and letting those fall
+     * towards grey under the bar suits the page better than making them
+     * louder than they are on it. A `contrast` and a
+     * `brightness` sat here for a while too, put in to force what passes
+     * behind out of legibility while the blur was silently doing nothing at
+     * all; with the blur working they only turned the glass milky.
+     *
+     * No hand-written `-webkit-` twin here. Lightning CSS prefixes this from
+     * the browserslist targets, and writing the prefixed property alongside
+     * it made it drop the standard one instead of keeping both — which left
+     * Firefox with a tinted bar and no blur at all. Let the build do it.
+     */
+    backdrop-filter: blur(8px) saturate(80%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.7),
+      0 10px 30px -24px rgb(17 17 17 / 0.55);
+  }
+
+  /* `.shell` supplies the gutter, so the brand lines up with the page */
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-block: 0.5rem;
+  }
+
+  .nav-brand {
+    display: none;
+    flex: none;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .nav-mark {
+    display: grid;
+    height: 1.85rem;
+    width: 1.85rem;
+    flex: none;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--color-ink);
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #fff;
+  }
+
+  .nav-brand-name {
+    /* one line: the bar is too shallow to wrap a name without crowding */
+    white-space: nowrap;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    /* centred between the brand and the call to action, and centred alone
+       at the widths where neither of those is shown */
+    margin-inline: auto;
+    gap: 0.1rem;
+    /* at narrow widths the links scroll rather than fold into a menu */
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  /*
+   * Only below the breakpoint where the brand and the call to action appear,
+   * because that is the width at which the links outrun the bar. The fade
+   * says there is more to the right; above it the links fit and a fade would
+   * just dim the last one for nothing.
+   */
+  @media (max-width: 639px) {
+    .nav-links {
+      mask-image: linear-gradient(
+        90deg,
+        #000 0,
+        #000 calc(100% - 1.5rem),
+        transparent 100%
+      );
+    }
+  }
+
+  .nav-links a {
+    white-space: nowrap;
+    border-radius: 999px;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8125rem;
+    color: var(--color-body);
+    transition:
+      color 0.2s var(--ease-out-soft),
+      background-color 0.2s var(--ease-out-soft);
+  }
+
+  .nav-links a:hover {
+    background: rgb(17 17 17 / 0.05);
+    color: var(--color-ink);
+  }
+
+  .nav-cta {
+    display: none;
+    flex: none;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    background: var(--color-ink);
+    padding: 0.5rem 0.9rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #fff;
+    transition: background-color 0.2s var(--ease-out-soft);
+  }
+
+  .nav-cta:hover {
+    background: var(--color-ink-soft);
+  }
+
+  @media (min-width: 640px) {
+    .nav-brand {
+      display: flex;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+    }
+
+    .nav-inner {
+      gap: 1rem;
+    }
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  /*
+   * The reveal is driven on `.nav-bar` itself rather than on `.site-header`
+   * around it, and it moves the bar without touching its opacity. Both of
+   * those are load-bearing for the glass: an ancestor that animates `opacity`
+   * becomes a backdrop root, and a backdrop root cuts `backdrop-filter` off
+   * from the page behind it — the bar keeps its tint and loses its blur, so
+   * the text passing underneath stays perfectly readable. Moving the element
+   * is free; fading it is not.
+   */
+  .nav-bar {
+    /*
+     * Gentle at both ends rather than the site's usual ease-out, which is a
+     * quintic and would spend most of the run already arrived. This keeps the
+     * bar moving with the scroll and settling at the end of it.
+     */
+    animation: nav-reveal cubic-bezier(0.45, 0, 0.25, 1) both;
+    animation-timeline: scroll(root block);
+    /*
+     * It waits for the badge. The card is the whole of the first impression,
+     * and a bar sliding over it while the reader is still looking at it is
+     * an interruption.
+     *
+     * The bar is fully in by the time the card's foot has come up to within
+     * 8rem of the top of the screen — the point at which the badge has
+     * stopped being the thing in front of the reader and navigation is what
+     * they want next. That foot is measured from the badge's own tokens, so
+     * resizing the card moves this with it rather than leaving a copied
+     * number behind.
+     */
+    --badge-foot: calc(
+      var(--badge-strap) + var(--badge-clip-gap) + var(--badge-width) /
+        var(--badge-ratio)
+    );
+    --nav-reveal-to: calc(var(--badge-foot) - 8rem);
+    /* a long, unhurried run into the same finishing point */
+    animation-range: calc(var(--nav-reveal-to) - 9rem) var(--nav-reveal-to);
+  }
+
+  /*
+   * It comes down from above its own edge, clear of the screen to begin with,
+   * so nothing of it shows before the run starts and nothing has to be faded
+   * to hide it.
+   */
+  @keyframes nav-reveal {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  /* A bar that slides about under the reader is worse than one that is just
+     there, so it is present from the start when motion is not wanted. */
+  @media (prefers-reduced-motion: reduce) {
+    .nav-bar {
+      animation: none;
+    }
+  }
+}
+
+/*
+ * "How I work" — the section between the hero and the case studies, and the
+ * dashboard drawn beside it.
+ */
+@layer components {
+  .process {
+    position: relative;
+    /*
+     * `clip` rather than `hidden` on purpose. The visual leans past the right
+     * edge of the measure and has to be cut off there, but `overflow: hidden`
+     * would make this section a scroll container, and the visual's parallax
+     * is driven by a `view()` timeline that then resolves against this
+     * section — which never scrolls — instead of the page. `clip` cuts
+     * without creating the scroller. The vertical axis stays visible so the
+     * cards' shadows are not sliced.
+     */
+    overflow-x: clip;
+    overflow-y: visible;
+    background: var(--color-surface-alt);
+    padding-block: 4.5rem 5rem;
+  }
+
+  /* The hero ends in white, so this warms into its own surface rather than
+     meeting it at a seam. */
+  .process::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 14rem;
+    background: linear-gradient(
+      180deg,
+      var(--color-surface),
+      rgb(255 255 255 / 0)
+    );
+    pointer-events: none;
+  }
+
+  .process > .shell {
+    position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .process {
+      padding-block: 6.5rem 7rem;
+    }
+  }
+
+  .process-copy > * + * {
+    margin-top: 1.25rem;
+  }
+
+  .process-cta {
+    margin-top: 2rem;
+  }
+
+  .process-intro {
+    display: grid;
+    gap: 1.5rem;
+    /* one column: the words have the whole measure */
+    /*
+     * How much room the words have. On one column that is all of it; in the
+     * two-column layout below it is the screen, less the render (45% of the
+     * screen with its right edge a gutter from the window), less the margin
+     * the page centres itself in, less the shell's padding, less a gap. Both
+     * the headline and the paragraph are capped by it, which is why neither
+     * ever has to be checked against the image by hand.
+     */
+    --process-measure: 100%;
+  }
+
+  .process-headline {
+    /*
+     * The type scale is eased below the site's usual so that the longer of
+     * the two lines still clears the render beside it at the narrowest
+     * desktop, rather than wrapping to a third.
+     */
+    max-width: min(21ch, var(--process-measure));
+    font-size: clamp(1.9rem, 3vw, 2.625rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.028em;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  .process-body {
+    max-width: min(54ch, var(--process-measure));
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-body);
+    text-wrap: pretty;
+  }
+
+  /*
+   * His line breaks, honoured only where they fit.
+   *
+   * Both strings carry a newline at the point he wants them to turn, and
+   * `pre-line` is what renders it; everywhere else the newline collapses to
+   * a space and the browser wraps as it would have. The two breakpoints are
+   * not the same because the two lines are not the same length: the
+   * headline's longer line needs the room a 1024px screen leaves beside the
+   * render, the paragraph's needs a 1280px one. Below each, wrapping gives
+   * the better shape than a forced break that immediately wraps again.
+   */
+  @media (min-width: 1024px) {
+    .process-headline {
+      white-space: pre-line;
+      /*
+       * The character cap and the balancing both go once the break is
+       * written down: they were only ever there to shape a line the browser
+       * chose, and either can work against an authored one.
+       */
+      max-width: var(--process-measure);
+      text-wrap: wrap;
+      /*
+       * And the type gives way before the line does. The longer of the two
+       * lines is a shade over 13em wide, so dividing the room by 13.6 is the
+       * largest size at which it is certain to hold — whatever the font is
+       * actually measuring on the reader's machine. Normally the scale above
+       * is smaller and wins; this only bites when the room is tight, and
+       * then it shrinks the type by a point or two instead of letting the
+       * headline fall to three lines or four.
+       */
+      font-size: min(
+        clamp(1.9rem, 3vw, 2.625rem),
+        calc(var(--process-measure) / 13.6)
+      );
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .process-body {
+      white-space: pre-line;
+      max-width: var(--process-measure);
+    }
+  }
+
+  .process-visual {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.75rem;
+  }
+
+  .process-visual-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    /*
+     * The render carries its own cool backdrop, and the section's is a warm
+     * off-white, so left alone it would read as a rectangle pasted onto the
+     * page. Fading every edge dissolves the join: the composition keeps its
+     * light and the page keeps its surface.
+     */
+    mask-image:
+      linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent),
+      linear-gradient(180deg, transparent, #000 6%, #000 94%, transparent);
+    mask-composite: intersect;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent),
+      linear-gradient(180deg, transparent, #000 6%, #000 94%, transparent);
+    -webkit-mask-composite: source-in;
+  }
+
+  @media (min-width: 1024px) {
+    /*
+     * Twelve columns, five of them for the argument and seven for the
+     * picture of it. Each part is placed by name, so the visual can sit
+     * between the paragraph and the call to action in the source — which is
+     * the order a phone wants — without the wide layout inheriting it.
+     */
+    .process-intro {
+      --process-measure: calc(
+        55vw - 2.5rem - max(0px, 100vw - 78rem) / 2 - 2.5rem - 3rem
+      );
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 2rem;
+      row-gap: 1.25rem;
+      align-items: start;
+    }
+
+    /*
+     * Seven columns for the words, seven for the render, overlapping by one
+     * on paper only — the render is aligned to the end of its area and sized
+     * to the screen, so where its area starts never decides where it sits,
+     * and the words' own measure is what keeps the two apart. Both are
+     * centred against each other rather than hung from the top, so the
+     * shorter of the two does not leave a hole under it.
+     */
+    .process-copy {
+      grid-area: 1 / 1 / 2 / 8;
+      align-self: center;
+    }
+
+    .process-visual {
+      grid-area: 1 / 6 / 2 / 13;
+      align-self: center;
+      justify-content: flex-end;
+      margin-top: 0;
+      /*
+       * Once the page is wider than the measure, the render follows the
+       * screen rather than the text: it slides out into the margin so its
+       * right edge stays near the edge of the window. That is what keeps it
+       * a true 45% of the screen on a large monitor without it creeping
+       * under the headline, and it is where the depth comes from as well.
+       * Below 78rem there is no margin to move into and this is zero.
+       */
+      margin-inline-end: min(0px, calc((78rem - 100vw) / 2));
+    }
+
+    /*
+     * 45% of the screen, as asked. Below this breakpoint the layout is a
+     * single column and the render takes the full measure instead — 45% of a
+     * phone is not a picture, it is a stamp.
+     */
+    .process-visual-img {
+      width: 45vw;
+    }
+  }
+
+  .process-steps {
+    margin-top: 3.5rem;
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .process-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .process-steps {
+      margin-top: 5rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+  }
+
+  /*
+   * Four steps, not four services: the same surface, the same weight, read
+   * left to right. So the styling is nearly nothing — a hairline, a breath of
+   * white, and a shadow that only shows when the card is lifted.
+   */
+  .process-step {
+    position: relative;
+    height: 100%;
+    padding: 1.5rem 1.375rem 1.625rem;
+    border: 1px solid rgb(17 17 17 / 0.07);
+    border-radius: 1rem;
+    background: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.92),
+      rgb(255 255 255 / 0.62)
+    );
+    box-shadow:
+      0 1px 2px rgb(17 17 17 / 0.03),
+      0 22px 34px -30px rgb(17 17 17 / 0.45);
+    transition:
+      transform 0.45s var(--ease-out-soft),
+      box-shadow 0.45s var(--ease-out-soft),
+      border-color 0.45s var(--ease-out-soft);
+  }
+
+  .process-step:hover {
+    transform: translateY(-4px);
+    border-color: rgb(17 17 17 / 0.12);
+    box-shadow:
+      0 1px 2px rgb(17 17 17 / 0.04),
+      0 30px 44px -30px rgb(17 17 17 / 0.5);
+  }
+
+  /* Large enough to number the sequence at a glance, pale enough to stay
+     behind the words. */
+  .process-step-number {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.25rem;
+    font-size: 2.25rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: rgb(17 17 17 / 0.07);
+  }
+
+  .process-step-icon {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.7rem;
+    border: 1px solid rgb(91 94 224 / 0.14);
+    background: var(--color-accent-soft);
+    color: var(--color-accent-ink);
+  }
+
+  .process-step-name {
+    margin-top: 1.25rem;
+    font-size: var(--text-label);
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--color-muted);
+  }
+
+  .process-step-title {
+    margin-top: 0.65rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    line-height: 1.3;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  .process-step-body {
+    margin-top: 0.55rem;
+    font-size: 0.8125rem;
+    line-height: 1.65;
+    color: var(--color-body);
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process-step {
+      transition: none;
+    }
+
+    .process-step:hover {
+      transform: none;
+    }
+  }
+}
+
+/*
+ * The parallax. It is a view timeline rather than a scroll listener, so it
+ * costs no JavaScript and cannot run on the main thread: the composition
+ * rises a little as the section crosses the screen, which is enough to
+ * separate it from the words beside it without drawing the eye off them.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .process-visual-img {
+      animation: process-parallax linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+
+    @keyframes process-parallax {
+      from {
+        transform: translateY(1.5rem);
+      }
+      to {
+        transform: translateY(-1.5rem);
+      }
+    }
+  }
+}
+
+/*
+ * The companies strip, between the badge and "How I work".
+ */
+@layer components {
+  .marquee {
+    /*
+     * The hero fades to white at its foot and the section below opens white
+     * too, so the strip needs no band of its own — it is a line of type and
+     * a row of marks in the gap between them.
+     */
+    background: var(--color-surface);
+    padding-block: 3rem 3.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .marquee {
+      padding-block: 4rem 4.5rem;
+    }
+  }
+
+  .marquee-label {
+    text-align: center;
+  }
+
+  .marquee-viewport {
+    margin-top: 1.75rem;
+    overflow: hidden;
+    /* the row arrives and leaves rather than appearing at a hard edge */
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 48s linear infinite;
+  }
+
+  /* it stops for anyone reading it */
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  .marquee-row {
+    display: flex;
+    align-items: center;
+    gap: 3.5rem;
+    padding-inline-end: 3.5rem;
+  }
+
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    white-space: nowrap;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-body);
+  }
+
+  /*
+   * Grey, and not quite at full strength. The marks are small and squared
+   * and they arrive in five different colours; left as they are they would
+   * be the loudest thing on a page that is otherwise black and white.
+   */
+  .marquee-mark {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.3rem;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.72;
+  }
+
+  @keyframes marquee-scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /*
+   * Still, and centred, when motion is not wanted. The duplicate row exists
+   * only to make the loop seamless, so it goes; the remaining one wraps
+   * instead of running off the side.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-viewport {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+
+    .marquee-track {
+      width: auto;
+      animation: none;
+    }
+
+    .marquee-row[aria-hidden="true"] {
+      display: none;
+    }
+
+    .marquee-row {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.25rem 2.5rem;
+      padding-inline-end: 0;
+    }
+  }
+}

@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AbdelRahman Samy — Portfolio
 
-## Getting Started
+Personal portfolio site for AbdelRahman Samy, Senior Product Designer.
 
-First, run the development server:
+Built with Next.js 16 (App Router), React 19 and Tailwind CSS v4, exported as a
+static site (`output: "export"`) for deployment to Vercel on a custom domain.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # static export to ./out
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+app/                 route, layout, global styles and design tokens
+components/          one component per page section, plus shared ui/icons
+content/
+  types.ts           interfaces for every piece of page copy
+  site.ts            all copy and content, in one place
+public/work/         project imagery
+public/logos/        company logos used in the career timeline
+docs/design-references/  target design and current QA screenshots
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Editing content
 
-## Learn More
+All copy lives in `content/site.ts` behind the interfaces in `content/types.ts`,
+and is sourced from AbdelRahman's CV — roles, dates, employment type, per-role
+contributions, skills, tools, education and languages.
+No component contains hard-coded text, so a CMS or Supabase layer can be added
+later by replacing that single export with an async loader returning the same
+shapes — components stay untouched.
 
-To learn more about Next.js, take a look at the following resources:
+### Design tokens
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Colours, type scale and easing are defined once as Tailwind v4 `@theme` tokens
+in `app/globals.css`. The palette is deliberately monochrome; colour comes from
+project imagery only.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### The CV
 
-## Deploy on Vercel
+`public/AbdelRahman-Samy-CV.pdf` is the downloadable CV, wired through
+`site.cv.href`. To replace it, drop in the new file and update that path. Set
+`cv.href` to an empty string to hide every "Download CV" button.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Scroll reveal
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Sections fade in via a single `IntersectionObserver` (`components/ScrollReveal.tsx`)
+so the sections themselves stay server components. The hidden state is scoped to
+a `.reveal-ready` class set by an inline script before first paint, so content
+renders normally if JavaScript never runs.
