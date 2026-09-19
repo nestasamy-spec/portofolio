@@ -197,7 +197,6 @@
     line-height: 1.9rem;
   }
 
-
   .badge-strap-text {
     opacity: 0.75;
   }
@@ -590,9 +589,13 @@
      * flat tone instead of two, and `brightness` lifts what is left towards
      * the glass's own white before the gradient above covers it.
      */
+    /*
+     * No hand-written `-webkit-` twin here. Lightning CSS prefixes this from
+     * the browserslist targets, and writing the prefixed property alongside
+     * it made it drop the standard one instead of keeping both — which left
+     * Firefox with a tinted bar and no blur at all. Let the build do it.
+     */
     backdrop-filter: blur(70px) saturate(180%) contrast(0.55) brightness(1.15);
-    -webkit-backdrop-filter: blur(70px) saturate(180%) contrast(0.55)
-      brightness(1.15);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.7),
       0 10px 30px -24px rgb(17 17 17 / 0.55);
@@ -720,7 +723,16 @@
 }
 
 @supports (animation-timeline: scroll()) {
-  .site-header {
+  /*
+   * The reveal is driven on `.nav-bar` itself rather than on `.site-header`
+   * around it, and it moves the bar without touching its opacity. Both of
+   * those are load-bearing for the glass: an ancestor that animates `opacity`
+   * becomes a backdrop root, and a backdrop root cuts `backdrop-filter` off
+   * from the page behind it — the bar keeps its tint and loses its blur, so
+   * the text passing underneath stays perfectly readable. Moving the element
+   * is free; fading it is not.
+   */
+  .nav-bar {
     /*
      * Gentle at both ends rather than the site's usual ease-out, which is a
      * quintic and would spend most of the run already arrived. This keeps the
@@ -730,10 +742,10 @@
     animation-timeline: scroll(root block);
     /*
      * It waits for the badge. The card is the whole of the first impression,
-     * and a pill sliding over it while the reader is still looking at it is
+     * and a bar sliding over it while the reader is still looking at it is
      * an interruption.
      *
-     * The pill is fully in by the time the card's foot has come up to within
+     * The bar is fully in by the time the card's foot has come up to within
      * 8rem of the top of the screen — the point at which the badge has
      * stopped being the thing in front of the reader and navigation is what
      * they want next. That foot is measured from the badge's own tokens, so
@@ -750,25 +762,23 @@
   }
 
   /*
-   * Mostly a fade. The bar used to come in from a full height above itself,
-   * which is a lot of movement for something that is only appearing; half its
-   * height is enough to read as arriving from above without the lunge.
+   * It comes down from above its own edge, clear of the screen to begin with,
+   * so nothing of it shows before the run starts and nothing has to be faded
+   * to hide it.
    */
   @keyframes nav-reveal {
     from {
-      opacity: 0;
-      transform: translateY(-55%);
+      transform: translateY(-100%);
     }
     to {
-      opacity: 1;
       transform: translateY(0);
     }
   }
 
-  /* A pill that slides about under the reader is worse than one that is just
+  /* A bar that slides about under the reader is worse than one that is just
      there, so it is present from the start when motion is not wanted. */
   @media (prefers-reduced-motion: reduce) {
-    .site-header {
+    .nav-bar {
       animation: none;
     }
   }
