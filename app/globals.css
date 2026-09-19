@@ -847,11 +847,28 @@
   .process-intro {
     display: grid;
     gap: 1.25rem;
+    /* one column: the words have the whole measure */
+    /*
+     * How much room the words have. On one column that is all of it; in the
+     * two-column layout below it is the screen, less the render (45% of the
+     * screen with its right edge a gutter from the window), less the margin
+     * the page centres itself in, less the shell's padding, less a gap. Both
+     * the headline and the paragraph are capped by it, which is why neither
+     * ever has to be checked against the image by hand.
+     */
+    --process-measure: 100%;
   }
 
   .process-headline {
-    max-width: 18ch;
-    font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+    /*
+     * Two lines from 1024px up. 20ch is the width of the longer of the two —
+     * "into clear product decisions." — at every size the clamp below
+     * reaches, and the clamp is tuned so that width still clears the render
+     * beside it at the narrowest desktop. Widen one without the other and
+     * the headline either breaks to three lines or runs under the image.
+     */
+    max-width: min(21ch, var(--process-measure));
+    font-size: clamp(1.9rem, 3vw, 2.625rem);
     font-weight: 600;
     line-height: 1.08;
     letter-spacing: -0.028em;
@@ -860,7 +877,7 @@
   }
 
   .process-body {
-    max-width: 46ch;
+    max-width: min(54ch, var(--process-measure));
     font-size: 0.9375rem;
     line-height: 1.7;
     color: var(--color-body);
@@ -901,6 +918,9 @@
      * the order a phone wants — without the wide layout inheriting it.
      */
     .process-intro {
+      --process-measure: calc(
+        55vw - 2.5rem - max(0px, 100vw - 78rem) / 2 - 2.5rem - 3rem
+      );
       grid-template-columns: repeat(12, minmax(0, 1fr));
       column-gap: 2rem;
       row-gap: 1.25rem;
@@ -908,23 +928,30 @@
     }
 
     .process-eyebrow {
-      grid-area: 1 / 1 / 2 / 6;
+      grid-area: 1 / 1 / 2 / 8;
     }
 
     .process-headline {
-      grid-area: 2 / 1 / 3 / 6;
+      grid-area: 2 / 1 / 3 / 8;
     }
 
     .process-body {
-      grid-area: 3 / 1 / 4 / 6;
+      grid-area: 3 / 1 / 4 / 8;
     }
 
     .process-cta {
-      grid-area: 4 / 1 / 5 / 6;
+      grid-area: 4 / 1 / 5 / 8;
       margin-top: 1rem;
     }
 
     .process-visual {
+      /*
+       * Still from the sixth column, although the copy now runs to the
+       * eighth. The areas overlap on paper only: the render is aligned to
+       * the end of its area and sized to the screen, so the start of that
+       * area never decides where it sits — and the copy's own measure is
+       * what keeps the two apart.
+       */
       grid-area: 1 / 6 / 5 / 13;
       align-self: center;
       justify-content: flex-end;
