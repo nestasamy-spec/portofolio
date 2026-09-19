@@ -563,16 +563,28 @@
 
   .nav-bar {
     pointer-events: auto;
-    border-bottom: 1px solid rgb(17 17 17 / 0.07);
+    border-bottom: 1px solid rgb(17 17 17 / 0.06);
     /*
-     * Opaque, not frosted. The bar arrives while the badge is still on screen
-     * and spends its first moments straddling it, and later passes the dark
-     * philosophy panel; any translucency turned the stretch in front of those
-     * grey, so the bar read as a seam across itself rather than one surface.
+     * Glass. The gradient is what makes it read as glass rather than as a
+     * washed-out white: it catches the light at the top and falls away, and
+     * the inset highlight below draws the lit edge.
+     *
+     * The alpha does not go lower than this on purpose. The bar arrives over
+     * the black badge and later crosses the dark philosophy panel, and body
+     * text is `--color-body` on whatever the glass settles to: at 0.80 over
+     * black that is #d1d1d1, which holds 4.6:1 and clears AA. Thinner glass
+     * looks better for a moment and then cannot be read for the rest of it.
      */
-    background: var(--color-surface);
-    /* a hairline's worth of lift, not a floating object's shadow */
-    box-shadow: 0 10px 26px -24px rgb(17 17 17 / 0.5);
+    background: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.86),
+      rgb(255 255 255 / 0.8)
+    );
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.7),
+      0 10px 30px -24px rgb(17 17 17 / 0.55);
   }
 
   /* `.shell` supplies the gutter, so the brand lines up with the page */
@@ -698,7 +710,12 @@
 
 @supports (animation-timeline: scroll()) {
   .site-header {
-    animation: nav-reveal linear both;
+    /*
+     * Gentle at both ends rather than the site's usual ease-out, which is a
+     * quintic and would spend most of the run already arrived. This keeps the
+     * bar moving with the scroll and settling at the end of it.
+     */
+    animation: nav-reveal cubic-bezier(0.45, 0, 0.25, 1) both;
     animation-timeline: scroll(root block);
     /*
      * It waits for the badge. The card is the whole of the first impression,
@@ -717,13 +734,19 @@
         var(--badge-ratio)
     );
     --nav-reveal-to: calc(var(--badge-foot) - 8rem);
-    animation-range: calc(var(--nav-reveal-to) - 4rem) var(--nav-reveal-to);
+    /* a long, unhurried run into the same finishing point */
+    animation-range: calc(var(--nav-reveal-to) - 9rem) var(--nav-reveal-to);
   }
 
+  /*
+   * Mostly a fade. The bar used to come in from a full height above itself,
+   * which is a lot of movement for something that is only appearing; half its
+   * height is enough to read as arriving from above without the lunge.
+   */
   @keyframes nav-reveal {
     from {
       opacity: 0;
-      transform: translateY(-140%);
+      transform: translateY(-55%);
     }
     to {
       opacity: 1;
