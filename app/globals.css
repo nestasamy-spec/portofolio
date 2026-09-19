@@ -129,20 +129,11 @@
   .badge-stage {
     display: flex;
     justify-content: center;
-    /*
-     * Pulled above the section's top edge so the strap is clipped well inside
-     * the frame. Sitting flush with it, the ribbon read as chopped off rather
-     * than as running on past the top of the page. The strap reads the lift
-     * too, so the two stay in step: whatever is pulled out of view is added
-     * back to the plain band of ribbon above the first letter.
-     */
-    --badge-lift: 1.25rem;
-    margin-top: calc(-1 * var(--badge-lift));
   }
 
   .badge-swing {
-    /* long enough to run off the top of the section rather than start in it */
-    --badge-strap: 6.5rem;
+    /* the length that shows; its top fades out rather than ending */
+    --badge-strap: 5.25rem;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -177,19 +168,27 @@
     text-transform: uppercase;
     line-height: 1.9rem;
     /*
-     * Holds the first letter clear of the clip. A glyph sliced exactly at the
-     * frame edge reads as a mistake; a plain band of ribbon reads as a ribbon.
+     * The ribbon ends inside the frame, so without this its top would be a
+     * hard black edge ruled across the page — a cut, whatever is or is not
+     * cut with it. Fading it out instead lets it recede into the section, and
+     * the lettering that fades with it is no loss: the strap repeats itself.
      */
-    padding-top: calc(var(--badge-lift) + 0.9rem);
+    --badge-fade: 2rem;
+    mask-image: linear-gradient(to bottom, transparent, #000 var(--badge-fade));
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      #000 var(--badge-fade)
+    );
   }
 
   @media (min-width: 768px) {
     .badge-swing {
-      --badge-strap: 11rem;
+      --badge-strap: 8.75rem;
     }
 
-    .badge-stage {
-      --badge-lift: 2.25rem;
+    .badge-strap {
+      --badge-fade: 3rem;
     }
   }
 
