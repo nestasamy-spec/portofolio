@@ -17,6 +17,13 @@ export interface Stat {
 }
 
 export interface Hero {
+  /**
+   * Whether the block under the badge is rendered: the eyebrow, the headline,
+   * the intro, the buttons and the stats. Set it false and the hero is the
+   * badge alone — every line below stays here, so bringing it back is this
+   * one value.
+   */
+  showIntro: boolean;
   eyebrow: string[];
   headline: string;
   intro: string;

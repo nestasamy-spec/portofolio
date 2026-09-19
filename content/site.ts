@@ -39,6 +39,11 @@ export const site: SiteContent = {
   navCta: { label: "Let's work together", href: "#contact" },
 
   hero: {
+    /*
+     * Off for now, at his request, and kept rather than deleted: he expects
+     * to want it back. The hero is the badge on its own while it is false.
+     */
+    showIntro: false,
     eyebrow: ["Product Design", "Fintech", "Government", "Enterprise", "MENA"],
     headline: "Designing enterprise-grade digital products that scale.",
     intro:

@@ -42,8 +42,14 @@ function LinkRow({ link }: { link: BadgeLink }) {
  * Each face's label covers the whole card, so a click anywhere turns it while
  * the contact links on the back, which sit above the label, keep their own.
  */
-export function LanyardBadge() {
+export function LanyardBadge({ asHeading = false }: { asHeading?: boolean }) {
   const { badge } = site;
+  /*
+   * When the hero's copy is switched off the badge is the first thing on the
+   * page, so its name becomes the document's h1. Otherwise the hero's own
+   * headline holds that and this stays a paragraph.
+   */
+  const Name = asHeading ? "h1" : "p";
 
   return (
     <div className="badge-stage">
@@ -87,7 +93,7 @@ export function LanyardBadge() {
               )}
             </span>
 
-            <p className="badge-name">{badge.name}</p>
+            <Name className="badge-name">{badge.name}</Name>
             <p className="badge-role">{badge.role}</p>
             <p className="badge-tagline">{badge.tagline}</p>
 
