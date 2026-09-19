@@ -582,17 +582,20 @@
       rgb(255 255 255 / 0.8)
     );
     /*
-     * Blur and a little saturation, and nothing else. A `contrast` and a
-     * `brightness` sat here for a while, put in to force what passes behind
-     * out of legibility while the blur was silently doing nothing at all;
-     * with the blur working they only turned the glass milky.
+     * Blur and a touch of saturation, and nothing else. The saturation only
+     * ever shows over the project images, since the rest of the page has no
+     * colour to lift; it keeps them from going grey under the glass without
+     * making them louder than they are on the page. A `contrast` and a
+     * `brightness` sat here for a while too, put in to force what passes
+     * behind out of legibility while the blur was silently doing nothing at
+     * all; with the blur working they only turned the glass milky.
      *
      * No hand-written `-webkit-` twin here. Lightning CSS prefixes this from
      * the browserslist targets, and writing the prefixed property alongside
      * it made it drop the standard one instead of keeping both — which left
      * Firefox with a tinted bar and no blur at all. Let the build do it.
      */
-    backdrop-filter: blur(8px) saturate(180%);
+    backdrop-filter: blur(8px) saturate(120%);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.7),
       0 10px 30px -24px rgb(17 17 17 / 0.55);
