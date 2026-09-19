@@ -10,11 +10,10 @@ import { ArrowRightIcon, ProcessIcon } from "./icons";
  * it — no years, no industries, no title. Its job is to give the reader the
  * frame they will read the case studies through, and then hand them over.
  *
- * The visual is placed between the paragraph and the call to action in the
- * source rather than after it. Stacked on a phone that is the order the eye
- * wants — headline, then the thing itself, then the invitation — and on a
- * wide screen the grid lifts it out into the right-hand columns, so neither
- * layout needs to reorder the other.
+ * The words come first in the source and the render second, which is the
+ * order a phone wants; on a wide screen the grid lifts the render out into
+ * the right-hand columns beside them, so neither layout has to reorder the
+ * other.
  */
 export function Process() {
   const { process } = site;
@@ -23,19 +22,30 @@ export function Process() {
     <section id="process" className="process">
       <div className="shell">
         <div className="process-intro">
-          <p className="eyebrow process-eyebrow" data-reveal>
-            {process.label}
-          </p>
-
-          <h2 className="process-headline" data-reveal data-reveal-delay="60">
-            {process.heading}
-          </h2>
-
-          {process.body ? (
-            <p className="process-body" data-reveal data-reveal-delay="100">
-              {process.body}
+          <div className="process-copy">
+            <p className="eyebrow" data-reveal>
+              {process.label}
             </p>
-          ) : null}
+
+            <h2 className="process-headline" data-reveal data-reveal-delay="60">
+              {process.heading}
+            </h2>
+
+            {process.body ? (
+              <p className="process-body" data-reveal data-reveal-delay="100">
+                {process.body}
+              </p>
+            ) : null}
+
+            {process.cta ? (
+              <div className="process-cta" data-reveal data-reveal-delay="140">
+                <Button href={process.cta.href}>
+                  {process.cta.label}
+                  <ArrowRightIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            ) : null}
+          </div>
 
           {/*
             Decorative: an empty `alt` keeps it out of the accessibility tree,
@@ -51,15 +61,6 @@ export function Process() {
               className="process-visual-img"
             />
           </div>
-
-          {process.cta ? (
-            <div className="process-cta" data-reveal data-reveal-delay="140">
-              <Button href={process.cta.href}>
-                {process.cta.label}
-                <ArrowRightIcon className="h-4 w-4" />
-              </Button>
-            </div>
-          ) : null}
         </div>
 
         {/*

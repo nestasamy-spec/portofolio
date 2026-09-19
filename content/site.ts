@@ -124,9 +124,20 @@ export const site: SiteContent = {
 
   process: {
     label: "01 — How I work",
-    heading: "I turn messy requirements into clear product decisions.",
-    body: "I bring business goals, user needs and technical constraints together to create experiences that are clear, practical and ready to ship.",
-    cta: { label: "See how I work", href: "#work" },
+    /*
+     * The line breaks are his, not the browser's. Both of these set on two
+     * lines and break where he asked them to, and the section's CSS renders
+     * the newlines rather than collapsing them — narrow enough and they
+     * still wrap further on their own.
+     */
+    heading: "I turn messy requirements\ninto clear product decisions.",
+    body: "I bring business goals, user needs and technical constraints together\nto create experiences that are clear, practical and ready to ship.",
+    /*
+     * No call to action here on purpose. "See how I work" sat inside the
+     * section called How I work and pointed at the section immediately
+     * below it, which the reader reaches by carrying on down the page.
+     * `cta` is optional, so adding it back here is all it would take.
+     */
     steps: [
       {
         number: "01",
