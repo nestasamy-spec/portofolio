@@ -25,13 +25,16 @@ export const site: SiteContent = {
       "Senior Product Designer with 8+ years designing fintech, government and enterprise products across MENA and global markets.",
   },
 
+  /*
+   * Home and Contact are deliberately absent. Both the nav pill and the footer
+   * carry a brand mark that already links to the top, and both already carry a
+   * way to get in touch — the pill's call to action, the footer's mail icon.
+   */
   nav: [
-    { label: "Home", href: "#top" },
     { label: "Work", href: "#work" },
     { label: "Expertise", href: "#expertise" },
     { label: "Experience", href: "#experience" },
     { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
   ],
   navCta: { label: "Let's work together", href: "#contact" },
 

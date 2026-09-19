@@ -118,6 +118,26 @@
 }
 
 /*
+ * The badge's geometry lives here rather than on the badge, because the nav
+ * pill keys its reveal to where the card ends and has to be able to read it.
+ */
+:root {
+  /* the strap runs to the top of the section, where it is cut off */
+  --badge-strap: 5.25rem;
+  --badge-width: clamp(16rem, 78vw, 22rem);
+  /* the card's width over its height, as `aspect-ratio` below states it */
+  --badge-ratio: 0.7;
+  /* the clip's height and the card's overlap of it */
+  --badge-clip-gap: 0.65rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --badge-strap: 8.75rem;
+  }
+}
+
+/*
  * The hero's hanging ID badge.
  *
  * Three nested transforms that must not fight each other: `.badge-swing`
@@ -132,8 +152,6 @@
   }
 
   .badge-swing {
-    /* the length that shows; its top fades out rather than ending */
-    --badge-strap: 5.25rem;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -167,30 +185,8 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     line-height: 1.9rem;
-    /*
-     * The ribbon ends inside the frame, so without this its top would be a
-     * hard black edge ruled across the page — a cut, whatever is or is not
-     * cut with it. Fading it out instead lets it recede into the section, and
-     * the lettering that fades with it is no loss: the strap repeats itself.
-     */
-    --badge-fade: 2rem;
-    mask-image: linear-gradient(to bottom, transparent, #000 var(--badge-fade));
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent,
-      #000 var(--badge-fade)
-    );
   }
 
-  @media (min-width: 768px) {
-    .badge-swing {
-      --badge-strap: 8.75rem;
-    }
-
-    .badge-strap {
-      --badge-fade: 3rem;
-    }
-  }
 
   .badge-strap-text {
     opacity: 0.75;
@@ -237,7 +233,7 @@
   .badge-card {
     position: relative;
     margin-top: -0.35rem;
-    width: clamp(16rem, 78vw, 22rem);
+    width: var(--badge-width);
     aspect-ratio: 7 / 10;
     transform-style: preserve-3d;
     /*
@@ -595,22 +591,12 @@
     color: #fff;
   }
 
-  .nav-brand-text {
-    display: block;
-    line-height: 1.15;
-  }
-
   .nav-brand-name {
-    display: block;
-    font-size: 0.75rem;
+    /* one line: the pill is too shallow to wrap a name without crowding */
+    white-space: nowrap;
+    font-size: 0.8125rem;
     font-weight: 600;
     color: var(--color-ink);
-  }
-
-  .nav-brand-role {
-    display: block;
-    font-size: 0.625rem;
-    color: var(--color-muted);
   }
 
   .nav-links {
@@ -698,8 +684,19 @@
   .site-header {
     animation: nav-reveal linear both;
     animation-timeline: scroll(root block);
-    /* clear of the fold before it appears, then a short slide */
-    animation-range: 64px 320px;
+    /*
+     * It waits for the badge. The card is the whole of the first impression,
+     * and a pill sliding over it while the reader is still looking at it is
+     * an interruption; once the card has gone past, navigation is what the
+     * reader wants next. So the reveal starts at the card's foot — strap,
+     * clip and card measured from the tokens themselves, which keeps this in
+     * step if the badge is ever resized — and completes a short slide later.
+     */
+    --nav-reveal-at: calc(
+      var(--badge-strap) + var(--badge-clip-gap) + var(--badge-width) /
+        var(--badge-ratio)
+    );
+    animation-range: var(--nav-reveal-at) calc(var(--nav-reveal-at) + 4rem);
   }
 
   @keyframes nav-reveal {

@@ -13,6 +13,9 @@ import { ArrowRightIcon } from "./icons";
  * There is no burger and no sheet. At small widths the pill drops the name and
  * the call to action and carries the section links alone, scrolling sideways if
  * they outrun the screen, which is both slimmer than a menu and one tap shorter.
+ *
+ * The links carry no Home and no Contact: the brand beside them already returns
+ * to the top, and the call to action beside them already opens contact.
  */
 export function Header() {
   return (
@@ -22,10 +25,7 @@ export function Header() {
           <span aria-hidden className="nav-mark">
             AS
           </span>
-          <span className="nav-brand-text">
-            <span className="nav-brand-name">{site.meta.name}</span>
-            <span className="nav-brand-role">{site.meta.role}</span>
-          </span>
+          <span className="nav-brand-name">{site.meta.name}</span>
         </a>
 
         <nav className="nav-links" aria-label="Sections">
