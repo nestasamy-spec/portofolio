@@ -129,6 +129,13 @@
   --badge-ratio: 0.7;
   /* the clip's height and the card's overlap of it */
   --badge-clip-gap: 0.65rem;
+  /*
+   * How far the strap is built above the cut. The swing tilts it, so a strap
+   * that merely reached the cut would meet it at an angle and leave a wedge of
+   * background in one corner — the corner that rises. This is several times
+   * the deepest that wedge gets, so only solid ribbon ever crosses the line.
+   */
+  --badge-overshoot: 0.75rem;
 }
 
 @media (min-width: 768px) {
@@ -149,6 +156,8 @@
   .badge-stage {
     display: flex;
     justify-content: center;
+    /* hangs the overshoot above the section, which clips it */
+    margin-top: calc(-1 * var(--badge-overshoot));
   }
 
   .badge-swing {
@@ -171,7 +180,8 @@
   .badge-strap {
     display: block;
     width: 1.9rem;
-    height: var(--badge-strap);
+    /* `--badge-strap` is the length that shows; the overshoot is cut away */
+    height: calc(var(--badge-strap) + var(--badge-overshoot));
     overflow: hidden;
     background: var(--color-ink);
     color: #fff;
@@ -562,7 +572,12 @@
     gap: 0.5rem;
     border-radius: 999px;
     border: 1px solid rgb(17 17 17 / 0.07);
-    background: rgb(255 255 255 / 0.82);
+    /*
+     * Nearly opaque, because the pill now arrives while the badge is still on
+     * screen and spends its first moments straddling it. At 0.82 the stretch
+     * over the card went grey and the pill read as two pieces.
+     */
+    background: rgb(255 255 255 / 0.94);
     padding: 0.3rem 0.35rem;
     backdrop-filter: blur(14px) saturate(160%);
     box-shadow:
@@ -687,16 +702,21 @@
     /*
      * It waits for the badge. The card is the whole of the first impression,
      * and a pill sliding over it while the reader is still looking at it is
-     * an interruption; once the card has gone past, navigation is what the
-     * reader wants next. So the reveal starts at the card's foot — strap,
-     * clip and card measured from the tokens themselves, which keeps this in
-     * step if the badge is ever resized — and completes a short slide later.
+     * an interruption.
+     *
+     * The pill is fully in by the time the card's foot has come up to within
+     * 8rem of the top of the screen — the point at which the badge has
+     * stopped being the thing in front of the reader and navigation is what
+     * they want next. That foot is measured from the badge's own tokens, so
+     * resizing the card moves this with it rather than leaving a copied
+     * number behind.
      */
-    --nav-reveal-at: calc(
+    --badge-foot: calc(
       var(--badge-strap) + var(--badge-clip-gap) + var(--badge-width) /
         var(--badge-ratio)
     );
-    animation-range: var(--nav-reveal-at) calc(var(--nav-reveal-at) + 4rem);
+    --nav-reveal-to: calc(var(--badge-foot) - 8rem);
+    animation-range: calc(var(--nav-reveal-to) - 4rem) var(--nav-reveal-to);
   }
 
   @keyframes nav-reveal {
